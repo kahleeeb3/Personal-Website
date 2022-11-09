@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Caleb Powell</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css_files/collapse.css">
+    <!--<link rel="icon" href="./css_files/logo.ico">-->
+
+    <style>
+        .column {
+            float: left;
+            width: 31%;
+            height: 45px;
+            padding-left: 5px;
+            padding-right: 5px;
+            text-align: center;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 1px;
+            background-color: rgb(0, 0, 0);
+            color: white;
+
+        }
+    </style>
+    <script>
+        let open = 0;
+        function myFunction(link, ElementId) {
+            if (open == 0) {
+                document.getElementById("PDFPreview").innerHTML = '<iframe id="iframe" src="files/' + link + '" width="700" height="450"></iframe>';
+                document.getElementById(ElementId).innerHTML = 'Close Preview';
+                open = 1;
+            }
+            else {
+                document.getElementById("PDFPreview").innerHTML = '';
+                document.getElementById(ElementId).innerHTML = 'Open Preview';
+                open = 0;
+            }
+        }
+    </script>
+</head>
+
+
+<body style="background-color:rgb(71, 71, 71);">
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&#10005;</a>
+        <a href="./files/2022_Resume_Caleb_Powell.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+        <a href="./files/Wabash Transcript (Unofficial).pdf" target="_blank" rel="noopener noreferrer">Transcript</a>
+        <!-- <a href="#">Learn More</a> -->
+        <a href="mailto: cmp0132@auburn.edu">Email</a>
+    </div>
+
+    <div id="main" style="background-color:#c6c6c6;padding-left: 50px;padding-right: 50px;">
+        <p id="sidebarbtn"></p>
+
+        <div id="Name/Photo" style="text-align: center;">
+            <h1 style="font-family: Verdana; color:rgb(40,40,40);">Caleb Matthew Powell</h1>
+            <p>
+                <img src="files/Caleb.jpg" width="35%" />
+                <!-- <img src="files/IMG_0537_Original.jpeg" width="19.65%" />
+                <img src="files/Caleb.jpg" width="30%" /> -->
+            </p>
+            <p>
+                <img src="files/Wabash.png" width=19.65% style="padding-right: 10px;" />
+                <img src="files/Auburn.png" width="29%" />
+            </p>
+            A recent graduate from Wabash College with a double major in Physics and Mathematics and a minor in
+            Computer Science. Looking to expand upon my minor studies by pursuing a Master of Science in Computer Science
+            and Software Engineering at Auburn University. My current potential research interests are in Artificial 
+            Intelligence, Data Engineering, and Software Engineering. Currently in search of a Graduate Research or Assistant 
+            position.
+        </div>
+        <div id="body">
+
+            <h3>Education</h3>
+            <div id="Education" style="width: 85%; margin: auto;">
+                <div class="row">
+                    <div class="column">
+                        M.S. Computer Science and Software Engineering
+                    </div>
+                    <div class="column">
+                        Auburn University, Auburn, AL
+                    </div>
+                    <div class="column">
+                        Expected: May 2024
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="column">
+                        B.A. Physics & Computational Mathematics
+                    </div>
+                    <div class="column">
+                        Wabash College, Crawfordsville, IN
+                    </div>
+                    <div class="column">
+                        May 2022
+                    </div>
+                </div>
+            </div>
+
+            <div id="Technical Skills">
+                <h3>Technical Skills: </h3>
+                Proficient in Python, HTML, LaTeX, Mathematica, Jupyter Notebook; Experienced in Java, C, JavaScript,
+                CSS, SolidWorks, Adobe Photoshop; Certification in Autodesk Revit Architectural Software, AutoCAD
+                Drafting Software
+            </div>
+
+            <div id="Extracurricular Activity">
+                <h3>Extracurricular Activity</h3>
+                Computer Science Club President/Founder, Wabash College (AUG 2021- MAY 2022)<br>
+                Society of Physics Students Vice President, Wabash College (AUG 2021- MAY 2022)<br>
+                Association for Computing Machinery Member (AUG 2022 - Present)<br>
+                Sigma Pi Sigma Member (MAY 2022 - Present)<br>
+            </div>
+            <div id="Professional Experience">
+                <h3>Professional Experience</h3>
+                Web Development Intern, TechPoint (JUN 2020 - AUG 2020) <br>
+                Physics Research Intern, Wabash College Physics Department (JUN 2021 - AUG 2022)<br>
+                Tech Intern, Education Technology Center, Wabash College (AUG 2019 - MAY 2022)<br>
+                Physics Quantitative Skills Center Tutor, Wabash College (AUG 2019- MAY 2022)<br>
+            </div>
+
+            <div id="Written Works">
+                <h3>Written Works</h3>
+                <p>
+                    Arduino Uno Oscilloscope <a href="./files/FinalProject.pdf" target="_blank"
+                        rel="noopener noreferrer">View
+                        File</a>.<br>
+                    A Mathematical Analysis of the 15 Puzzle <a href="./files/15_Puzzle.pdf" target="_blank"
+                        rel="noopener noreferrer">View File</a>.<br>
+                    Analysis of Orthogonal Matrices <a href="./files/Orthogonal_Matrices-1.pdf" target="_blank"
+                        rel="noopener noreferrer">View File</a>.
+                </p>
+            </div>
+
+            <div id="Coding Repositories">
+                <h3>Coding Repositories</h3>
+
+                5 Week Tech Point "SOS-Challange" (Summer 2020) <a
+                    href="https://github.com/Sunsetdreamer52/SOS-Challenge">GitHub</a><br>
+
+                Python Discord API Implementation (2021) <a href="https://github.com/kahleeeb3/CSC-Club">GitHub</a><br>
+
+                Small Group Web Development (2021) <a href="https://github.com/kahleeeb3/Web-Team">GitHub</a><br>
+
+                Analysis of Brinicle Growth Rate over Time (Summer 2021 - Present) <a
+                    href="https://github.com/kahleeeb3/Brinicle">Github</a><br>
+            </div>
+
+            <footer>
+                <p>This ePortfolio was developed by Caleb Powell.</p>
+                <!-- To view the source code, please visit the <a
+                        href="https://github.com/kahleeeb3/Web-Team/tree/main/user/Caleb%20Powell" style="color:white">
+                        GitHub</a> repository.</p> -->
+            </footer>
+        </div>
+    </div>
+
+    <script>
+
+        /* Open Sidebar */
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+            document.getElementById("sidebarbtn").innerHTML = "";
+        }
+
+        /* Close Sidebar */
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+            var elem = document.getElementById("sidebarbtn");
+            elem.innerHTML = '<button class="openbtn" onclick="openNav()">&#9776 Open Sidebar</button>';
+        }
+
+        /* Set the sidebar to initially be open if window is big enough*/
+        if (window.screen.width >= 700) {
+            openNav()
+        }
+        else {
+            closeNav()
+        }
+    </script>
+
+</body>
+
+</html>
