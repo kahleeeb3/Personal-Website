@@ -91,18 +91,26 @@
     <div id="main" style="background-color:#c6c6c6;padding-left: 50px;padding-right: 50px;">
         <p id="sidebarbtn"></p>
 
-        <div id="Name/Photo" style="text-align: center;">
-            <!-- <h1 style="font-family: Verdana; color:rgb(40,40,40);">Caleb Matthew Powell</h1> -->
+        <div id="Header" style="text-align: center;">
             <p>
                 <img src="files/Wabash.png" width=19.65% style="padding-right: 10px;" />
                 <img src="files/Auburn.png" width="29%" />
             </p>
+        </div>
+        <div id="Bio">
+            <h2>About Me</h2>
             My name is Caleb Matthew Powell. I am a graduate student at Auburn University 
             within the department of Computer Science and Software Engineering. Before coming
-            to Auburn in August of 2022, I studied at Wabash College and graduated with a double 
+            to Auburn, I studied at Wabash College and graduated with a double 
             major in Physics and Computational Mathematics with a minor in Computer Science.
         </div>
         <div id="body">
+
+            <div id = "Current Works">
+                <h3>Current Works</h3>
+                To learn more about my current projects and interests, please check out my 
+                <a href="">Projects Page</a>.
+            </div>
 
             <h3>Education</h3>
             <div id="Education" style="width: 85%; margin: auto;">
@@ -140,8 +148,8 @@
 
             <div id="Extracurricular Activity">
                 <h3>Extracurricular Activity</h3>
-                Computer Science Club President/Founder, Wabash College (Aug 2021- MAY 2022)<br>
-                Society of Physics Students Vice President, Wabash College (Aug 2021- MAY 2022)<br>
+                Computer Science Club President/Founder, Wabash College (Aug 2021- May 2022)<br>
+                Society of Physics Students Vice President, Wabash College (Aug 2021- May 2022)<br>
                 Association for Computing Machinery Member (Aug 2022 - Present)<br>
                 Sigma Pi Sigma Member (May 2022 - Present)<br>
             </div>
@@ -205,6 +213,21 @@
         }
         else {
             closeNav()
+            // Chnage the education section to not be columned
+            const div = document.getElementById('Education');
+            div.innerHTML = 
+            `
+            <div id="Education">
+                M.S. Computer Science and Software Engineering<br>
+                Auburn University, Auburn, AL<br>
+                Expected: May 2024<br>
+                <br>
+                B.A. Physics & Computational Mathematics<br>
+                Wabash College, Crawfordsville, IN<br>
+                May 2022
+            </div>
+            `;
+            div.style = null;
         }
     </script>
 
