@@ -1,0 +1,44 @@
+<div class="table-wrap">
+  <table class="sortable">
+    <!-- HEADERS -->
+    <thead>
+      <tr>
+        <!-- Title -->
+        <th>
+          <button>
+            Title
+            <span aria-hidden="true"></span>
+          </button>
+        </th>
+        <!-- Group -->
+        <th aria-sort="ascending">
+          <button>
+            Group
+            <span aria-hidden="true"></span>
+          </button>
+        </th>
+        <!-- Date -->
+        <th>
+          <button>
+            Date
+            <span aria-hidden="true"></span>
+          </button>
+        </th>
+      </tr>
+    </thead>
+    <!-- BODY -->
+    <tbody>
+      <tr>
+        <td>Tiled Backgrounds</td>
+        <td>GBA</td>
+        <td>Nov 01, 2022</td>
+      </tr>
+      <tr>
+        <td>Sprite Animation</td>
+        <td>GBA</td>
+        <td>Nov 10, 2022</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+        
