@@ -74,4 +74,13 @@
 
 <!-- This script allows converting CSV to HTML tables -->
 <script src="../src/js/read.js"></script>
-<script>csvTable("../files/Projects.csv","CSVTable");</script>
+<script>
+csvTable("../files/Projects.csv","CSVTable");
+if (window.screen.width >= 700) {
+  //pass
+} 
+else {
+  const table = document.getElementById("CSVTable");
+  table.style.fontSize = "small";
+}
+</script>

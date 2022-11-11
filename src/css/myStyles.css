@@ -13,6 +13,7 @@
 /* MY TABLES THEME */
 .myTable{
     width: 100%;
+    /* font-size: 10px; */
 }
 .myTable th{
     padding: 5px 5px 5px 5px;
