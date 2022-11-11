@@ -1,3 +1,77 @@
-<!-- Must Define the Table before running the script -->
-<table id="CSVTable"></table>
-<script src="../css_files/readcsv.js"></script>
+<html>
+
+<head>
+    <title>Caleb Powell</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../src/css/sidebar.css">
+    <link rel="stylesheet" href="../src/css/myStyles.css">
+    <!--<link rel="icon" href="./css_files/logo.ico">-->
+</head>
+
+
+<body class="background">
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&#10005;</a>
+        <p>
+            <img src="../files/Caleb.jpg" width="85%" /></img><br>
+            <br>
+            Caleb Powell <br>
+            <br>
+            Graduate Student<br>
+            Department of CSSE<br>
+            Auburn University<br>
+            <br>
+            COMP-2210 GTA
+        </p>
+        <div class='parent'>
+            <div class='child'>
+                <a class="links" href="mailto: powellcalebm@gmail.com">
+                    <img src="../files/mail.png" width="10%" />
+                    <span>Email</span>
+                </a>
+            </div>
+            <div class='child'>
+                <a class="links" href="https://www.linkedin.com/in/calebmpowell/">
+                    <img src="../files/linkedin.png" width="10%" />
+                    <span> LinkedIn</span>
+                </a>
+            </div>
+            <div class='child'>
+                <a class="links" href="https://github.com/kahleeeb3">
+                    <img src="../files/github.png" width="10%" />
+                    <span>Github</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="main" class="main" style="margin-left: 250px;">
+        <p id="sidebarbtn"></p>
+        <h3>Current Projects</h3>
+        <p>
+            Welcome! To explore my current interests, please consult the table below. This table acts a directory
+            for a set of blog posts relating to my various side projects. 
+            I try to make a blog post for every "major step" in a project
+            (there is even a post for the creation of this table). 
+            The more complex topics will have multiple entries labled under respctive titles.
+        </p>
+
+        <div style="text-align: center;">
+            <table class="myTable" id="CSVTable"></table>
+        </div>
+
+    </div>
+</body>
+
+</html>
+
+<!-- This script allows pdf files to be opened 
+    in a new tab instead of forcing a download -->
+<script src="../src/js/pdf.js"></script>
+
+<!-- This script allows for the animation of the 
+    sidebar and must go at the bottom of each html -->
+<script src="../src/js/sidebar.js"></script>
+
+<!-- This script allows converting CSV to HTML tables -->
+<script src="../src/js/read.js"></script>
+<script>csvTable("../files/Projects.csv","CSVTable");</script>

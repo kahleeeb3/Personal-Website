@@ -4,6 +4,7 @@
  *
  *   File:   sortable-table.js
  *
+ * 
  *   Desc:   Adds sorting to a HTML data table that implements ARIA Authoring Practices
  */
 
