@@ -1,12 +1,12 @@
 console.log("testing..");
 var file = readTextFile("../files/Projects.csv");
 var allText;
-var reader = new FileReader();
+// var reader = new FileReader();
 var lines = allText.split("\n");
 lines.pop();
 
 // console.log(allText)
-// console.log(lines)
+console.log(lines)
 
 // get the table
 var table = document.getElementById("CSVTable");
@@ -27,7 +27,7 @@ for (let i = 0; i < lines.length; i++) {
   newTable = newTable.concat("</tr>\n");
 }
 newTable = newTable.concat("</table>\n");
-console.log(newTable);
+// console.log(newTable);
 
 table.innerHTML = newTable;
 
