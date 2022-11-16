@@ -59,7 +59,7 @@
         </figure>
 
         <p>
-            Please note that this blog post is simplification of a more detailed report
+            Please note that this blog post is a simplification of a more detailed report
             which you can find 
             <a href="./files/FinalProject.pdf" target="_blank" rel="noopener noreferrer">here</a>.
             The purpose of this post is to quickly summarize the main points of the larger report.
@@ -71,7 +71,7 @@
         <p>
             The analog input on
             the Arduino Uno will only measure positive voltages between the values 0-5V.
-            However, in order to create an effective oscilloscope, the input should be able to
+            However, to create an effective oscilloscope, the input should be able to
             have values between +/- 10V. We will solve this problem using two types of circuits:
         </p>
         <h3>Inverting Amplifier</h3>
@@ -98,9 +98,8 @@
         </figure>
 
         <p>
-            To explain, If the input AC voltage is +/- 10V, we can scale it
-            by a factor of 1/4 so that it is now +/- 2.5V. We can then add 2.5V to that so we
-            are now reading a +/- 10V input as 0-5V.
+            To explain, if the input AC voltage is +/- 10V, we can scale it by a factor
+             of 1/4 so that it is now +/- 2.5V. Then we can add 2.5V to read a +/- 10V input as 0-5V.
         </p>
 
         <h2>Summary and Results</h2>
@@ -112,7 +111,7 @@
         <p>
             The amplitude
             measurement was very acceptable after corrections. The frequency measurement was not great, however, the result that we got matches perfectly with
-            what we would expect according to "<b>Nyquist Theorem</b>". The Nyquist Theorem states that "in order to adequately reproduce a signal, the signal should
+            what we would expect according to the "<b>Nyquist Theorem</b>". The Nyquist Theorem states that "in order to adequately reproduce a signal, the signal should
             be periodically sampled at a rate that is <b>2X the highest frequency you wish to
             record</b>." Considering the Arduino records at 1 ms, we can only collect samples
             at a rate of 1000 Hz. This means we can only accurately reproduce signals at a
@@ -125,11 +124,11 @@
         </figure>
 
         <p>
-            We successfully achieved the maximum potential on the Arduino Uno. For next steps in this project, 
-            one could add a knob to adjust the value of the scale. 
-            We could also 3D print an enclosure for this and power it using a 9V
-            battery. Doing this would also eliminate the noisy power input on the second
-            inverting amplifier as well as make it portable.
+            We successfully achieved the maximum potential of the Arduino Uno. For the next steps
+            in this project, one could add a knob to adjust the value of the scale.
+            We could also 3D print an enclosure for this and power it using a 9V battery.
+            Doing this would also eliminate the noisy power input on the second inverting amplifier
+            as well as make it portable.
         </p>
 
 
