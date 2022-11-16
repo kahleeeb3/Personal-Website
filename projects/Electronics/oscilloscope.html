@@ -1,0 +1,147 @@
+<html>
+
+<head>
+    <title>Caleb Powell</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../src/css/sidebar.css">
+    <link rel="stylesheet" href="../../src/css/myStyles.css">
+    <!--<link rel="icon" href="./css_files/logo.ico">-->
+</head>
+
+
+<body class="background">
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&#10005;</a>
+        <p>
+            <img src="../../files/Caleb.jpg" width="85%" /></img><br>
+            <br>
+            Caleb Powell <br>
+            <br>
+            Graduate Student<br>
+            Department of CSSE<br>
+            Auburn University<br>
+            <br>
+            COMP-2210 GTA
+        </p>
+        <div class='parent'>
+            <div class='child'>
+                <a class="links" href="mailto: powellcalebm@gmail.com">
+                    <img src="../../files/mail.png" width="10%" />
+                    <span>Email</span>
+                </a>
+            </div>
+            <div class='child'>
+                <a class="links" href="https://www.linkedin.com/in/calebmpowell/">
+                    <img src="../../files/linkedin.png" width="10%" />
+                    <span> LinkedIn</span>
+                </a>
+            </div>
+            <div class='child'>
+                <a class="links" href="https://github.com/kahleeeb3">
+                    <img src="../../files/github.png" width="10%" />
+                    <span>Github</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="main" class="main" style="margin-left: 250px;">
+        <p id="sidebarbtn"></p>
+        <h3>November 1, 2021</h3>
+        <h1>Arduino Uno Oscilloscope</h1>
+        <p>
+            An analysis of Arduino Uno applications through the construction of an 
+            Oscilloscope using the C programming language and Amplifier Circuits.
+        </p>
+
+        <figure style="text-align: center;">
+            <img src="./Files/halfscale(2).JPG" alt="Lab Oscilloscope" style="width:50%;">
+            <figcaption>Fig.1 - Output of DIY Oscilloscope on a 1.3 inch 128x64 LCD.</figcaption>
+        </figure>
+
+        <p>
+            Please note that this blog post is simplification of a more detailed report
+            which you can find 
+            <a href="./files/FinalProject.pdf" target="_blank" rel="noopener noreferrer">here</a>.
+            The purpose of this post is to quickly summarize the main points of the larger report.
+            To access the code related to this project, please visit this
+            <a href="./files/code.ino" target="_blank" rel="noopener noreferrer">link</a>.
+        </p> 
+
+        <h2>Quick Electronics Review</h2>
+        <p>
+            The analog input on
+            the Arduino Uno will only measure positive voltages between the values 0-5V.
+            However, in order to create an effective oscilloscope, the input should be able to
+            have values between +/- 10V. We will solve this problem using two types of circuits:
+        </p>
+        <h3>Inverting Amplifier</h3>
+            <figure style="text-align: center;">
+                <img src="./Files/inverting.png" alt="Lab Oscilloscope" style="width:50%;">
+                <figcaption>Fig.2 - Inverting Amplifier Circuit used in this Project.</figcaption>
+            </figure>
+            <div align ="center"> 
+                <img src="https://latex.codecogs.com/svg.image?\inline&space;\large&space;V_{out}=&space;-\frac{R_2}{R_1}&space;\times&space;V_{in}"/>
+            </div>
+        <h3>Summing Amplifier</h3>
+            <figure style="text-align: center;">
+                <img src="./Files/summing.png" alt="Lab Oscilloscope" style="width:50%;">
+                <figcaption>Fig.3 - Summing Amplifier Circuit used in this Project.</figcaption>
+            </figure>
+            <div align ="center"> 
+                <img src="https://latex.codecogs.com/svg.image?\inline&space;\large&space;V_{out}=-R_3&space;\left(&space;\frac{V_a}{R_1}&space;&plus;&space;\frac{V_b}{R_2}\right)&space;=&space;-(V_a&space;&plus;&space;V_b)"/>
+            </div>
+
+        <h3>Combine The Two</h3>
+        <figure style="text-align: center;">
+            <img src="./Files/circuit.png" alt="Lab Oscilloscope" style="width:50%;">
+            <figcaption>Fig.4 - Circuit to correct the input signal.</figcaption>
+        </figure>
+
+        <p>
+            To explain, If the input AC voltage is +/- 10V, we can scale it
+            by a factor of 1/4 so that it is now +/- 2.5V. We can then add 2.5V to that so we
+            are now reading a +/- 10V input as 0-5V.
+        </p>
+
+        <h2>Summary and Results</h2>
+        <figure style="text-align: center;">
+            <img src="./Files/setup(1).jpg" alt="Lab Oscilloscope" style="width:50%;">
+            <figcaption>Fig.5 - A picture of the lab setup and circuit.</figcaption>
+        </figure>
+
+        <p>
+            The amplitude
+            measurement was very acceptable after corrections. The frequency measurement was not great, however, the result that we got matches perfectly with
+            what we would expect according to "<b>Nyquist Theorem</b>". The Nyquist Theorem states that "in order to adequately reproduce a signal, the signal should
+            be periodically sampled at a rate that is <b>2X the highest frequency you wish to
+            record</b>." Considering the Arduino records at 1 ms, we can only collect samples
+            at a rate of 1000 Hz. This means we can only accurately reproduce signals at a
+            frequency <b>up to 500 Hz</b>. This aligns perfectly with the results that we achieved.
+        </p>
+
+        <figure style="text-align: center;">
+            <img src="./Files/Full.png" alt="Lab Oscilloscope" style="width:50%;">
+            <figcaption>Fig.6 - Full circuit diagram for this project.</figcaption>
+        </figure>
+
+        <p>
+            We successfully achieved the maximum potential on the Arduino Uno. For next steps in this project, 
+            one could add a knob to adjust the value of the scale. 
+            We could also 3D print an enclosure for this and power it using a 9V
+            battery. Doing this would also eliminate the noisy power input on the second
+            inverting amplifier as well as make it portable.
+        </p>
+
+
+    </div>
+</body>
+
+</html>
+
+<!-- This script allows pdf files to be opened 
+    in a new tab instead of forcing a download -->
+<script src="../../src/js/pdf.js"></script>
+
+<!-- This script allows for the animation of the 
+    sidebar and must go at the bottom of each html -->
+<script src="../../src/js/sidebar.js"></script>
