@@ -1,0 +1,96 @@
+<html>
+
+<head>
+    <title>Caleb Powell</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../src/css/sidebar.css">
+    <link rel="stylesheet" href="../../src/css/myStyles.css">
+    <link href="../../src/css/prism.css" rel="stylesheet" />
+    <!--<link rel="icon" href="./css_files/logo.ico">-->
+
+    <!-- These script allows for embedding code files within html -->
+    <script src="../../src/js/prism.js"></script>
+    <script src="../../src/js/read.js"></script>
+
+</head>
+
+
+<body class="background">
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&#10005;</a>
+        <p>
+            <img src="../../files/Caleb.jpg" width="85%" /></img><br>
+            <br>
+            Caleb Powell <br>
+            <br>
+            Graduate Student<br>
+            Department of CSSE<br>
+            Auburn University<br>
+            <br>
+            COMP-2210 GTA
+        </p>
+        <div class='parent'>
+            <div class='child'>
+                <a class="links" href="mailto: powellcalebm@gmail.com">
+                    <img src="../../files/mail.png" width="10%" />
+                    <span>Email</span>
+                </a>
+            </div>
+            <div class='child'>
+                <a class="links" href="https://www.linkedin.com/in/calebmpowell/">
+                    <img src="../../files/linkedin.png" width="10%" />
+                    <span> LinkedIn</span>
+                </a>
+            </div>
+            <div class='child'>
+                <a class="links" href="https://github.com/kahleeeb3">
+                    <img src="../../files/github.png" width="10%" />
+                    <span>Github</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="main" class="main" style="margin-left: 250px;">
+        <p id="sidebarbtn"></p>
+        <h3>November 10, 2022</h3>
+        <h1>CSV to HTML Table</h1>
+        <p>
+            Our goal for today is to construct a set of javascript functions
+            to take a CSV file as input and output an HTML table format of that file.
+        </p>
+        <p>
+            <b>Note:</b> any modifications to <i>read.js</i> in the future will result 
+            in changes to this page. If the code blocks below need changes, please 
+            consult the source code
+            <a href="../../src/js/read.js" target="_blank" rel="noopener noreferrer">here</a>.
+        </p>
+
+        <h2>Reading Text Files as Strings</h2>
+        <pre><code id = "code1" class="language-javascript"></code></pre>
+        <script>codeCell("../../src/js/read.js", 36, 52, "code1");</script>
+        
+        <h2>Reading Text Files as Arrays</h2>
+        <pre><code id = "code2" class="language-javascript"></code></pre>
+        <script>codeCell("../../src/js/read.js", 29, 35, "code2");</script>
+
+        <h2>Converting Text File Arrays to HTML Tables</h2>
+        <pre><code id = "code3" class="language-javascript"></code></pre>
+        <script>codeCell("../../src/js/read.js", 0, 28, "code3");</script>
+
+        <h2>Insert Code Blocks into HTML (Extra)</h2>
+        <pre><code id = "code4" class="language-javascript"></code></pre>
+        <script>codeCell("../../src/js/read.js", 51, 56, "code4");</script>
+
+
+    </div>
+</body>
+
+</html>
+
+<!-- This script allows pdf files to be opened 
+    in a new tab instead of forcing a download -->
+<script src="../../src/js/pdf.js"></script>
+
+<!-- This script allows for the animation of the 
+    sidebar and must go at the bottom of each html -->
+<script src="../../src/js/sidebar.js"></script>

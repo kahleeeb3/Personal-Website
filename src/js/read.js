@@ -48,3 +48,9 @@ function readTextFile(file) {
   rawFile.send(null);
   return allText;
 }
+
+function codeCell(file, start, end, id){
+  const code = textFileAsArray(file);
+  var section = code.slice(start,end).join(" ");
+  document.getElementById(id).innerHTML = section;
+}
