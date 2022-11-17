@@ -65,9 +65,20 @@
             <a href="../../src/js/read.js" target="_blank" rel="noopener noreferrer">here</a>.
         </p>
 
-        <h2>Reading Text Files as Strings</h2>
+        <h2>The Text File</h2>
+
+        ```javascript
+        function textFileAsArray(file){
+            var allText = readTextFile(file);
+            var lines = allText.split("\n");
+            lines.pop();
+            return lines;
+          }
+        ```
+
+        <!-- <h2>Reading Text Files as Strings</h2>
         <pre><code id = "code1" class="language-javascript"></code></pre>
-        <script>codeCell("../../src/js/read.js", 36, 52, "code1");</script>
+        <script>codeCell("../../src/js/read.js", 36, 50, "code1");</script>
         
         <h2>Reading Text Files as Arrays</h2>
         <pre><code id = "code2" class="language-javascript"></code></pre>
@@ -79,7 +90,7 @@
 
         <h2>Insert Code Blocks into HTML (Extra)</h2>
         <pre><code id = "code4" class="language-javascript"></code></pre>
-        <script>codeCell("../../src/js/read.js", 51, 56, "code4");</script>
+        <script>codeCell("../../src/js/read.js", 51, 56, "code4");</script> -->
 
 
     </div>
