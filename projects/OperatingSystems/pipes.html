@@ -49,29 +49,24 @@
 
 int main(int argc, char *argv[])
 {
-    
     pid_t child_pid = fork();
-
     // Error
     if (child_pid &lt; 0)
     {
         fprintf(stderr, "Fork failed");
         return 1;
     }
-
     // Parent Process
     if (child_pid &gt; 0)
     {
         printf("Parent process.\n");
     }
-
     // Child Process
     else
     {
         printf("Child process.\n");
 
     }
-
     return 0;
 }</code></pre>
         </div>
@@ -117,21 +112,17 @@ int main(void)
     if (pid &gt; 0) {  /* parent process */
         /* close the unused end of the pipe */
         close(fd[READ_END]);
-
         /* write to the pipe */
         write(fd[WRITE_END], write_msg, strlen(write_msg)+1); 
-
         /* close the write end of the pipe */
         close(fd[WRITE_END]);
     }
     else { /* child process */
         /* close the unused end of the pipe */
         close(fd[WRITE_END]);
-
         /* read from the pipe */
         read(fd[READ_END], read_msg, BUFFER_SIZE);
         printf("child read %s\n",read_msg);
-
         /* close the write end of the pipe */
         close(fd[READ_END]);
     }
@@ -147,7 +138,7 @@ int main(void)
             <pre class="highlight"><code>int main(int argc, char *argv[])
 {
     check_input( ); // check for valid user input
-    
+
     create_pipe( ); // create P1 for sending file content
     create_pipe( ); // create P2 for sending word count
 
@@ -170,7 +161,6 @@ int main(void)
         {
             write( ); // write chunk to P1
         }
-
         close_file( );
         close( ); // close write end of P1
 
@@ -181,7 +171,6 @@ int main(void)
         read( ); // read word count from P2
         close( ); // close read end of P2.
         printf("Process 1: The total number of words is %d.\n",count);
-
     }
 
     // Child Process
@@ -198,7 +187,6 @@ int main(void)
         close( ); // close read end of P2
         write( ); // write word count to P2
         close( ); // close write end of P2
-
     }
 
     return 0;
