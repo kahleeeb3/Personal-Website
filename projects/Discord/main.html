@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    <title>Caleb Powell</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../src/css/sidebar.css">
+    <link rel="stylesheet" href="../../src/css/myStyles.css">
+    <link href="../../src/css/prism.css" rel="stylesheet" />
+    <link rel="icon" href="./files/Caleb.ico">
+
+    <!-- These script allows for embedding code files within html -->
+    <script src="../../src/js/prism.js"></script>
+    <script src="../../src/js/read.js"></script>
+
+</head>
+
+
+<body class="background">
+    <div id="mySidebar" class="sidebar"></div>
+    <div id="main" class="main" style="margin-left: 250px;">
+        <p id="sidebarbtn"></p>
+        <h3>March 11, 2023</h3>
+        <h1>Creating Discord Bot with Discord.js</h1>
+        
+
+</html>
+
+<!-- This script allows pdf files to be opened 
+    in a new tab instead of forcing a download -->
+<script src="../../src/js/pdf.js"></script>
+
+<!-- This script allows for the animation of the 
+    sidebar and must go at the bottom of each html -->
+<script src="../../src/js/sidebar.js"></script>
+
+<!-- This script allows copying the sidebar-->
+<script src="../src/js/read.js"></script>
+<script>
+    var sidebar = document.getElementById('mySidebar');
+    var body = readTextFile("../../src/sidebar.html");
+    body = body.replace(/\.\.\//g, '../../'); // replaces "../" with "../../"
+    sidebar.innerHTML = body;
+</script>
