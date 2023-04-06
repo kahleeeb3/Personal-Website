@@ -1,0 +1,29 @@
+<h1>Test 2</h1>
+<code-cell lang="c">
+    #include <stdio.h>
+    #include <unistd.h>
+    
+    int main(int argc, char *argv[])
+    {
+        pid_t child_pid = fork();
+        // Error
+        if (child_pid < 0)
+        {
+            fprintf(stderr, "Fork failed");
+            return 1;
+        }
+        // Parent Process
+        if (child_pid > 0)
+        {
+            printf("Parent process.\n");
+        }
+        // Child Process
+        else
+        {
+            printf("Child process.\n");
+    
+        }
+        return 0;
+    }
+</code-cell>
+

@@ -1,0 +1,29 @@
+<html>
+
+<head>
+    <title>Caleb Powell</title>
+    <link rel="icon" href="./files/Caleb.ico"> <!-- Website icon -->
+    <meta http-equiv="Cache-Control" content="no-cache"> <!-- Dont let browser store cache -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/css/styleCollection.css" />
+    <script src="../src/js/read.js"></script> <!-- Load in HTML -->
+    <script src="./src/js/pdf.js"></script> <!-- PDF in new tab -->
+    <script src="./src/js/prism.js"></script> <!-- Code Syntax Highlighting -->
+    <script src="./src/js/prismSimplify.js"></script> <!-- custom code-cell element -->
+</head>
+
+<body class="background">
+    <div id="mySidebar" class="sidebar"></div>
+    <p id="sidebarbtn"></p>
+    <div id="main" class="main" style="margin-left: 250px;"></div> 
+</body>
+
+</html>
+
+<script src="./src/js/sidebar.js"></script> <!-- Sidebar Animation -->
+
+<script>
+    replaceHTML("mySidebar", "sidebar.html"); // add sidebar info
+    replaceHTML("main", "aboutme.html"); // insert main text
+</script>
+
