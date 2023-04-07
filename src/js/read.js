@@ -12,7 +12,7 @@ function csvTable(file, id) {
       if (i == 0) {
         newTable = newTable.concat("<th>" + value + "</th>\n");
       }
-      else if (value[0] == ".") {
+      else if (value[0] == "?") {
         console.log(value);
         newTable = newTable.concat('<td><a href="' + value + '"> Link </a> </td>\n');
       }
