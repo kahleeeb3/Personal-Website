@@ -1,0 +1,7 @@
+/* Combine all style sheets so 
+only one link is needed in the main HTML */
+
+@import url("sidebar.css");
+@import url("myStyles.css");
+@import url("prism.css");
+@import url("table.css");

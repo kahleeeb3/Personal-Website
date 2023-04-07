@@ -1,0 +1,116 @@
+body {
+    font-family: "Lato", sans-serif;
+}
+
+.sidebar {
+    color: white;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidebar a {
+    /* padding: 8px 8px 8px 32px; */
+    text-decoration: none;
+    font-size: 17px;
+    color: white;
+    /* display: block; */
+    /* transition: 0.3s; */
+}
+
+
+/* ADDED IN UPDATED SIDEBAR */
+
+.links{
+    display: flex;
+    align-items:center;
+}
+
+.parent {
+    padding: 8px 8px 8px 32px;
+    /* border: 1px solid black; */
+}
+
+/* ADDED IN UPDATED SIDEBAR */
+.child {
+    width:100%;
+    display: inline-block;
+    /* border: 1px solid red; */
+    /* vertical-align: middle; */
+}
+
+.child span{
+    padding: 5px 5px 5px 5px;
+}
+
+/* ADDED IN UPDATED SIDEBAR */
+.sidebar p {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 16px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+}
+
+.openbtn:hover {
+    background-color: #444;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+/* On smaller screens, where height is less than 450px, 
+change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidebar {
+        padding-top: 15px;
+    }
+
+    .sidebar a {
+        font-size: 18px;
+    }
+}
+
+.column {
+    float: left;
+    width: 31%;
+    height: 45px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
