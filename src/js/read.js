@@ -75,7 +75,7 @@ function get_page() {
   if (page !== null && page.trim() !== '') {
     replaceHTML("main", `${page}.html`); // insert main text
   } else {
-    replaceHTML("main", "aboutme.html"); // insert main text
+    replaceHTML("main", "home.html"); // insert main text
   }
 
   // add the csv table to projects
