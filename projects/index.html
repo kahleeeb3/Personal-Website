@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Caleb Powell - Projects</title>
+    <title>Caleb Powell</title>
     <link rel="icon" href="/files/Caleb.ico"> <!-- Website icon -->
     <meta http-equiv="Cache-Control" content="no-cache"> <!-- Dont let browser store cache -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,12 +19,17 @@
     <div id="main" class="main" style="margin-left: 250px;"></div>
 </body>
 
-<script src="/src/js/sidebar.js"></script> <!-- Sidebar Animation -->
-
 </html>
 
 
 <script>
     replaceHTML("mySidebar", "/sidebar.html"); // add sidebar info
-    replaceHTML("main", "/aboutme.html"); // insert main text
+    replaceHTML("main", "/projects/projects.html"); // insert main text
+</script>
+
+<script src="/src/js/sidebar.js"></script> <!-- Sidebar Animation -->
+
+<!-- Convert CSV to Table -->
+<script>
+    csvTable("../files/Projects.csv", "CSVTable");
 </script>

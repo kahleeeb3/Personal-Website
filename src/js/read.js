@@ -25,6 +25,16 @@ function csvTable(file, id) {
   newTable = newTable.concat("</table>\n");
   // console.log(newTable);
   table.innerHTML = newTable;
+
+  // Change the size of the table
+  if (window.screen.width >= 700) {
+    const table = document.getElementById("CSVTable");
+    table.style.fontSize = "normal";
+  }
+  else {
+    const table = document.getElementById("CSVTable");
+    table.style.fontSize = "small";
+  }
 }
 
 function textFileAsArray(file) {
