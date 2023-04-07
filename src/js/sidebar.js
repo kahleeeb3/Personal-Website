@@ -1,6 +1,13 @@
 // Open Sidebar
 function openNav() {
-    document.getElementById("mySidebar").style.width = "250px";
+
+    if (window.screen.width >= 700) {
+        document.getElementById("mySidebar").style.width = "250px";
+        
+    } else {
+        document.getElementById("mySidebar").style.width = window.screen.width;
+    }
+
     document.getElementById("main").style.marginLeft = "250px";
     document.getElementById("sidebarbtn").innerHTML = "";
 }
