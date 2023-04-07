@@ -28,11 +28,11 @@ function csvTable(file, id) {
 
   // Change the size of the table
   if (window.screen.width >= 700) {
-    const table = document.getElementById("CSVTable");
+    const table = document.getElementById(id);
     table.style.fontSize = "normal";
   }
   else {
-    const table = document.getElementById("CSVTable");
+    const table = document.getElementById(id);
     table.style.fontSize = "small";
   }
 }
@@ -63,4 +63,23 @@ function replaceHTML(element, file) {
   var HTMLElement = document.getElementById(element);
   var body = readTextFile(file);
   HTMLElement.innerHTML = body;
+}
+
+function get_page() {
+  // get the page you would like to load from the url
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const page = urlParams.get('page');
+
+  // check if a page was passed
+  if (page !== null && page.trim() !== '') {
+    replaceHTML("main", `${page}.html`); // insert main text
+  } else {
+    replaceHTML("main", "aboutme.html"); // insert main text
+  }
+
+  // add the csv table to projects
+  if(page === "projects/projects"){
+    csvTable("/files/Projects.csv", "CSVTable");
+  }
 }
