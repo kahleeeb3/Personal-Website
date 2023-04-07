@@ -11,7 +11,7 @@ class CodeCell extends HTMLElement {
 <pre><code class="language-${lang}">${code}
 </code></pre>
 </div>`;
-        console.log(newHTML);
+        // console.log(newHTML);
         this.innerHTML = newHTML;
     }
 }
