@@ -1,8 +1,8 @@
 ﻿Title,Topic,Date,Link
-A Pipe-based WordCount Tool,Operating Systems,02/10/2023,./OperatingSystems/pipes.html
+A Pipe-based WordCount Tool,Operating Systems,02/10/2023,?page=projects/OperatingSystems/pipes
 Tilemap Backgrounds,Gameboy Development,11/5/2022,WIP
 Character Animation,Gameboy Development,TBD,WIP
 Music/Audio Output,Gameboy Development,TBD,WIP
 K-Means Clustering,Machine Learning,11/8/2022,WIP
-Arduino Oscilloscope,Electronics,11/1/2021,./Electronics/oscilloscope.html
-CSV to HTML Table,Web Development,11/10/2022,./WebDev/csvtable.html
+Arduino Oscilloscope,Electronics,11/1/2021,?page=projects/Electronics/oscilloscope
+CSV to HTML Table,Web Development,11/10/2022,?page=projects/WebDev/csvtable
