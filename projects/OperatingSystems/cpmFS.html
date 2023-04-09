@@ -1,0 +1,96 @@
+<h3>April 8, 2023</h3>
+<h1>A Simple File System</h1>
+<p>
+    The goal of this project is to design and implement a simple file system called cpmFS
+    (i.e., CP/M file sytem). Through the late 1970s and into the mid-1980s, CP/M (Control
+    Program for Microcomputers) - a disk-based operating system - had dominated its era
+    as much as MS-DOS and later Windows dominated the IBM PC world. CP/M is clearly
+    not the last word in advanced file systems, but it is simple, fast, and can be
+    implemented by a competent programmer in less than a week.
+</p>
+<p>
+    Our simple file system will allow users to list directory entries, rename files, copy files,
+    delete files, as well as code to read/write/open/close files. We will use a version of
+    the CP/M file system used on 5.25” and 8” floppy disks in the 1970's (support for CP/M
+    file systems is still included in Linux to this day). We will develop our code in C. This
+    can be done on any computer with an ANSI C compiler (e,g. gcc, clang, etc.). We will not be
+    modifying the linux kernel but developing a stand-alone program (i.e., a simulated filesystem).
+</p>
+
+<h2>Extent</h2>
+<p>
+    Every file within our file system will have an associated <b>extent</b>. The extenet (also called the <b>File Control Block</b> or Directory Entry) is a
+    struct that contains exactly 32 bytes. These 32 bytes are split into two 16-byte sections. The first 16-byte section contains basic information about the file.
+    The first byte of this section contains the file <b>status</b>. To delete a file, we simple mark its status as invalid. The next next 8 bytes contain the file <b>name</b>.
+    The next 3 bytes are reserved for the file <b>extension</b> name. The final 4 bytes are reserved for <b>XL,BC,XH, and RC</b>. We will cover these later but for now we will say
+    that XL, and XH are reserved/unused for if we want to change the file system structure in the future. For now, we will not be using those two bytes.
+</p>
+<div align="center">
+    <img src="/projects/OperatingSystems/files/extent.png" style="width: 50%;"/>
+</div>
+<p>
+    The last 16-byte section contains <b>block pointers</b> (also referred to as block addresses). Each block pointer is a 8 bits (1 byte) that points to a single <b>block address space</b>. Because the second 
+    section contains 16-bytes, and each pointer is a single byte, <b>each file can contain up to 16 blocks</b>. Each block contains 1024 bytes (1kB).
+    Our FS can support in total 2^8= <b>256 blocks</b>. Thus, the address stored by our block pointer can be anywhere from 0-255. <b>Block 0 contains all extents in our FS</b>. Because this block (like all others) is 1024 bytes in size, it can hold a maximum of
+</p>
+<div align="center">
+    <img src="https://latex.codecogs.com/svg.image?1024&space;\text{&space;Bytes}/\frac{32&space;\text{&space;Bytes}}{\text{extent}}&space;=&space;32&space;\text{&space;extents}" />
+</div>
+<p>
+    This means <b>our FS can contain up to 32 files</b>. However, If we assume each file uses exactly 16 bytes, we can have up to
+</p>
+<div align="center">
+    <img src="https://latex.codecogs.com/svg.image?256&space;\text{&space;Blocks}/&space;\frac{16&space;\text{&space;Blocks}}{\text{&space;File}}&space;=&space;16&space;\text{&space;Files}" />
+</div> 
+
+<h2>Disk Format</h2>
+<p>
+    Our simulated hard disk will be stored in a file named <b>image1.img</b>. This disk will contain 256 blocks as previously stated. Block 0 will be reserved for the file system itself. 
+    It will contain the extents for every file as previously stated. Each block contains 1-8 <b>sectors</b>. Each sector can have up to 128 bytes. Every block other than the last block is 
+    <b>“fully loaded”</b>. The last block is <b>“partial filled”</b> meaning some sectors are not filled. We say the number of filled sectors is the <b>RC</b> value. The amount of space used 
+    in the partially filled sector in the last block is the <b>BC</b> value.
+</p>
+
+<div align="center">
+    <img src="/projects/OperatingSystems/files/disk.png" style="width: 50%;"/>
+</div>
+
+
+<h2>Access Extents</h2>
+<p>
+    Extents are stored in block 0 of the disk. There are a total of 32 extents. We wish to load block 0 into memory. We will do this using a function called <b>blockRead()</b>. The block is referred to
+    by a pointed we will name <b>"e"</b>. To extract a single extent, we will use another pointer named <b>"d"</b>. To do this we will write a function <b>mkDirStruct()</b> to load the <b>dirStruct</b>
+    data structure into main memory.
+</p>
+<div align="center">
+    <img src="/projects/OperatingSystems/files/extent_access.png" style="width: 35%;"/>
+</div>
+<script type="text/plain" class="language-c">
+    mkdirStruct(){
+        // work in progress
+    }
+</script>
+
+<h2>Calculating File Size</h2>
+<p>To calculate the file size, we will use the following equation</p>
+<div align="center">
+    <img
+        src="https://latex.codecogs.com/svg.image?fileSize&space;=&space;NB&space;\cdot&space;1kB&space;&plus;&space;RC&space;\cdot&space;128B&space;&plus;&space;BC" />
+</div>
+<p>
+    Where <i>NB</i> is the number of fully loaded blocks, <i>RC</i> is the number of sectors in last block, and <i>BC</i> is the number of bytes in the last 
+    sector. To get <i>NB</i> we will iterate over the blocks in the file <i>extent</i> until we find a null pointer indicating that block is not assigned. <i>RC</i>
+    and <i>BC</i> are given in the 4-byte section after the file extension. We can extract that information by doing the following
+</p>
+<script type="text/plain" class="language-c">
+    #define EXTENT_SIZE     32
+    // how to copy BC ref by index from B0 to dir entry ref by "d"
+    d->BC = (e + index * EXTENT_SIZE)[13]; // 13 bc that's where the BC is stored in extent
+    // how to copy RC
+    d->RC = (e + index * EXTENT_SIZE)[15]; // +2 bc RC is 2 bytes
+</script>
+ 
+
+<!-- 
+<h2>cpmfsys.h</h2>
+<p>contains function and data structure declarations in the CP/M file system</p> -->
