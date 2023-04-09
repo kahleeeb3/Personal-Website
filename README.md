@@ -10,3 +10,13 @@
     #include <unistd.h>
 </script>
 ```
+
+# To Do
+- add collapse menus option to pages.
+- fix image sizes on mobile
+```js
+if(mobile){
+    image-width: "100%"
+}
+```
+- add a latex code cell
