@@ -1,5 +1,5 @@
 /*
- * Controls colapsibles HTML objects
+ * Controls collapsibles HTML objects
  */
 
 
