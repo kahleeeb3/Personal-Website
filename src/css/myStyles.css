@@ -31,16 +31,16 @@
     background-color: transparent;
     color: black;
     cursor: pointer;
-    padding: 18px;
+    padding: 0px;
     width: 100%;
     border: none;
     text-align: left;
     outline: none;
-    font-size: 15px;
+    font-size: 30px;
     font-weight: bold;
   }
   
-  .active, .collapsible:hover {
+  .collapsible:hover {
     /* background-color: #555; */
     color: grey;
   }
@@ -50,7 +50,7 @@
     color: white;
     font-weight: bold;
     float: right;
-    margin-left: 5px;
+    /* margin-left: 5px; */
   }
   
   /* .active:after {
@@ -58,9 +58,9 @@
   } */
   
   .collapsible-content {
-    padding: 0 18px;
+    /* padding: 0 18px; */
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
-    background-color: #f1f1f1;
+    /* background-color: #f1f1f1; */
   }
