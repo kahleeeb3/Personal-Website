@@ -18,31 +18,49 @@
 
 // adds a listener to each collapsible button
 function addCollapsibleListeners() {
-  var coll = document.getElementsByClassName("collapsible"); // get all collapsible objects
-  // for each collapsible objects, add a click event listener
-  for (var i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", toggleCollapsible);
-  }
+  const collapsibles = document.querySelectorAll("button.collapsible"); // get a list of all collapsible buttons
+  // for each collapsible class
+  collapsibles.forEach((collapsible) => {
+    collapsible.addEventListener("click", toggleCollapsible); // add a click event listener
+
+    //if its labeled active
+    if (collapsible.classList.contains("active")) {
+      expandCollapsible(collapsible); // expand
+    }
+  });
 }
 
+
+function expandCollapsible(collapsibleButton) {
+  var content = collapsibleButton.nextElementSibling; // get the content of the collapsible
+  content.style.maxHeight = content.scrollHeight + "px"; // set height to scroll height
+  collapsibleButton.innerText = "\u23F7" + collapsibleButton.innerText.substring(1); // add a down pointing symbol to it
+}
+
+function collapseCollapsible(collapsibleButton) {
+  var content = collapsibleButton.nextElementSibling; // get the content of the collapsible
+  content.style.maxHeight = null; // set the height to 0
+  collapsibleButton.innerText = "\u23F5" + collapsibleButton.innerText.substring(1); // add a right pointing symbol to it
+}
+
+
 function toggleCollapsible() {
-  this.classList.toggle("active"); // toggle the status of the collapsible
-  var content = this.nextElementSibling; // get the content of the collapsible
 
   // if the collapsible is fully extended
-  if (content.style.maxHeight){
-    content.style.maxHeight = null; // set the height to 0
-    this.innerText = "\u23F5" + this.innerText.substring(1); // add a right pointing symbol to it
-  } 
+  if (this.classList.contains("active")) {
+    collapseCollapsible(this); // collapse the collapsible
+  }
 
   // if the collapsible is NOT fully extended
   else {
-    content.style.maxHeight = content.scrollHeight + "px"; // set height to scroll height
-    this.innerText = "\u23F7" + this.innerText.substring(1); // add a down pointing symbol to it
-  } 
+    expandCollapsible(this); // expand the collapsible
+  }
+
+  this.classList.toggle("active"); // toggle the status of the collapsible
+
 }
 
 // when this file is loaded, run the addCollapsibleListeners() function
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
   addCollapsibleListeners();
 });
