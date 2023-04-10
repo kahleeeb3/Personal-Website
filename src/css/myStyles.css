@@ -31,8 +31,9 @@
     background-color: transparent;
     color: black;
     cursor: pointer;
+    /* padding: 0px; */
+    /* width: 100%; */
     padding: 0px;
-    width: 100%;
     border: none;
     text-align: left;
     outline: none;

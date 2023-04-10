@@ -17,6 +17,9 @@
     modifying the linux kernel but developing a stand-alone program (i.e., a simulated filesystem).
 </p>
 
+<button class="collapsible">&#9205; Overview</button>
+<div class="collapsible-content">
+
 <h2>Extent</h2>
 <p>
     Every file within our file system will have an associated <b>extent</b>. The extenet (also called the <b>File Control Block</b> or Directory Entry) is a
@@ -26,7 +29,7 @@
     that XL, and XH are reserved/unused for if we want to change the file system structure in the future. For now, we will not be using those two bytes.
 </p>
 <div align="center">
-    <img src="/projects/OperatingSystems/files/extent.png" style="width: 50%;"/>
+    <img src="/projects/OperatingSystems/files/extent.png" id="figure" style="width: 50%;"/>
 </div>
 <p>
     The last 16-byte section contains <b>block pointers</b> (also referred to as block addresses). Each block pointer is a 8 bits (1 byte) that points to a single <b>block address space</b>. Because the second 
@@ -49,7 +52,7 @@
 </p>
 
 <div align="center">
-    <img src="/projects/OperatingSystems/files/disk.png" style="width: 50%;"/>
+    <img src="/projects/OperatingSystems/files/disk.png" id="figure" style="width: 50%;"/>
 </div>
 
 
@@ -60,7 +63,7 @@
     data structure into main memory.
 </p>
 <div align="center">
-    <img src="/projects/OperatingSystems/files/extent_access.png" style="width: 35%;"/>
+    <img src="/projects/OperatingSystems/files/extent_access.png" id="figure" style="width: 35%;"/>
 </div>
 <script type="text/plain" class="language-c">
     mkdirStruct(){
@@ -85,7 +88,7 @@
     d->RC = (e + index * EXTENT_SIZE)[15]; // +2 bc RC is 2 bytes
 </script>
  
-
+</div>
 <!-- 
 <h2>cpmfsys.h</h2>
 <p>contains function and data structure declarations in the CP/M file system</p> -->
