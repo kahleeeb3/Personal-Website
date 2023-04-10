@@ -33,15 +33,12 @@
     section contains 16-bytes, and each pointer is a single byte, <b>each file can contain up to 16 blocks</b>. Each block contains 1024 bytes (1kB).
     Our FS can support in total 2^8= <b>256 blocks</b>. Thus, the address stored by our block pointer can be anywhere from 0-255. <b>Block 0 contains all extents in our FS</b>. Because this block (like all others) is 1024 bytes in size, it can hold a maximum of
 </p>
-<div align="center">
-    <img src="https://latex.codecogs.com/svg.image?1024&space;\text{&space;Bytes}/\frac{32&space;\text{&space;Bytes}}{\text{extent}}&space;=&space;32&space;\text{&space;extents}" />
-</div>
+<latex-code>1024 \text{ Bytes}/ \frac{32 \text{ Bytes}}{\text{ extent}} = 32 \text{ extents}</latex-code>
 <p>
     This means <b>our FS can contain up to 32 files</b>. However, If we assume each file uses exactly 16 bytes, we can have up to
 </p>
-<div align="center">
-    <img src="https://latex.codecogs.com/svg.image?256&space;\text{&space;Blocks}/&space;\frac{16&space;\text{&space;Blocks}}{\text{&space;File}}&space;=&space;16&space;\text{&space;Files}" />
-</div> 
+
+<latex-code>256 \text{ Blocks}/\frac{32 \text{ Bytes}}{\text{extenet}} = 16 \text{ Files}</latex-code>
 
 <h2>Disk Format</h2>
 <p>
@@ -72,11 +69,9 @@
 </script>
 
 <h2>Calculating File Size</h2>
+
 <p>To calculate the file size, we will use the following equation</p>
-<div align="center">
-    <img
-        src="https://latex.codecogs.com/svg.image?fileSize&space;=&space;NB&space;\cdot&space;1kB&space;&plus;&space;RC&space;\cdot&space;128B&space;&plus;&space;BC" />
-</div>
+<latex-code>fileSize = NB \cdot 1kB + RC \cdot 128B + BC</latex-code>
 <p>
     Where <i>NB</i> is the number of fully loaded blocks, <i>RC</i> is the number of sectors in last block, and <i>BC</i> is the number of bytes in the last 
     sector. To get <i>NB</i> we will iterate over the blocks in the file <i>extent</i> until we find a null pointer indicating that block is not assigned. <i>RC</i>
