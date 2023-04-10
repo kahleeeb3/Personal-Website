@@ -28,8 +28,8 @@
 
 /* BELOW IS THE STYLES FOR COLLAPSIBLES */
 .collapsible {
-    background-color: #777;
-    color: white;
+    background-color: transparent;
+    color: black;
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -37,23 +37,25 @@
     text-align: left;
     outline: none;
     font-size: 15px;
+    font-weight: bold;
   }
   
   .active, .collapsible:hover {
-    background-color: #555;
+    /* background-color: #555; */
+    color: grey;
   }
   
   .collapsible:after {
-    content: '\002B';
+    /* content: '\002B'; */
     color: white;
     font-weight: bold;
     float: right;
     margin-left: 5px;
   }
   
-  .active:after {
+  /* .active:after {
     content: "\2212";
-  }
+  } */
   
   .collapsible-content {
     padding: 0 18px;
