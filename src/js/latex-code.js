@@ -29,11 +29,12 @@ class LatexCode extends HTMLElement {
         // Create an <img> element with the source and alt attributes set accordingly
         const imageElement = document.createElement("img");
         imageElement.setAttribute("src", imageSrc);
-        imageElement.setAttribute("alt", this._latexCode);
+        // imageElement.setAttribute("alt", this._latexCode); // set the alt of the image
         // Get the class attribute of the <latex-code> element;
         const imgStyle = this.getAttribute("class"); 
         // Set the style attribute of the new <img> element based on the class of the <latex-code> element
         imageElement.setAttribute("style", imgStyle);
+        imageElement.setAttribute("id", "latex-code"); // set the class as letex code
 
         // Create a <div> element with the image as its child
         const divElement = document.createElement("div");

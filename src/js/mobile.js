@@ -41,5 +41,12 @@ if (window.screen.width <= 700) {
         table.style.fontSize = "small";
     });
 
+    // make all letx code width of 100%
+    const latexCodes = document.querySelectorAll("img#latex-code");
+    latexCodes.forEach((latexCode) => {
+        console.log("changing image size");
+        latexCode.style.width = "100%";
+    });
+
 
 }
