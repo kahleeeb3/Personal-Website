@@ -21,12 +21,14 @@ function addCollapsibleListeners() {
   const collapsibles = document.querySelectorAll("button.collapsible"); // get a list of all collapsible buttons
   // for each collapsible class
   collapsibles.forEach((collapsible) => {
+
     collapsible.addEventListener("click", toggleCollapsible); // add a click event listener
 
-    //if its labeled active
-    if (collapsible.classList.contains("active")) {
-      expandCollapsible(collapsible); // expand
+    //if its not labeled active
+    if (!collapsible.classList.contains("active")) {
+      collapseCollapsible(collapsible); // expand
     }
+
   });
 }
 
@@ -34,13 +36,13 @@ function addCollapsibleListeners() {
 function expandCollapsible(collapsibleButton) {
   var content = collapsibleButton.nextElementSibling; // get the content of the collapsible
   content.style.maxHeight = content.scrollHeight + "px"; // set height to scroll height
-  collapsibleButton.innerText = "\u23F7" + collapsibleButton.innerText.substring(1); // add a down pointing symbol to it
+  collapsibleButton.innerText = collapsibleButton.innerText.substring(0, collapsibleButton.innerText.length-1) + "\u23F7"; // add a down pointing symbol to it
 }
 
 function collapseCollapsible(collapsibleButton) {
   var content = collapsibleButton.nextElementSibling; // get the content of the collapsible
-  content.style.maxHeight = null; // set the height to 0
-  collapsibleButton.innerText = "\u23F5" + collapsibleButton.innerText.substring(1); // add a right pointing symbol to it
+  content.style.maxHeight = "0px"; // set the height to 0
+  collapsibleButton.innerText = collapsibleButton.innerText.substring(0, collapsibleButton.innerText.length-1) + "\u23F5"; // add a right pointing symbol to it
 }
 
 
