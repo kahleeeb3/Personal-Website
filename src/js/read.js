@@ -13,7 +13,7 @@ function csvTable(file, id) {
         newTable = newTable.concat("<th>" + value + "</th>\n");
       }
       else if (value[0] == "?") {
-        console.log(value);
+        // console.log(value);
         newTable = newTable.concat('<td><a href="' + value + '"> Link </a> </td>\n');
       }
       else {
@@ -25,16 +25,6 @@ function csvTable(file, id) {
   newTable = newTable.concat("</table>\n");
   // console.log(newTable);
   table.innerHTML = newTable;
-
-  // Change the size of the table
-  if (window.screen.width >= 700) {
-    const table = document.getElementById(id);
-    table.style.fontSize = "normal";
-  }
-  else {
-    const table = document.getElementById(id);
-    table.style.fontSize = "small";
-  }
 }
 
 function textFileAsArray(file) {

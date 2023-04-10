@@ -26,20 +26,4 @@ if (window.screen.width >= 700) {
     openNav();
 } else {
     closeNav();
-
-    const div = document.getElementById("Education");
-    div.innerHTML = `
-            <div id="Education">
-                M.S. Computer Science and Software Engineering<br>
-                Auburn University, Auburn, AL<br>
-                Expected: May 2024<br>
-                <br>
-                B.A. Physics & Computational Mathematics<br>
-                Wabash College, Crawfordsville, IN<br>
-                May 2022
-            </div>
-            `;
-    div.style = null;
-
-    document.getElementById("CSVTable").style.fontSize = "small";
 }
