@@ -1,4 +1,4 @@
-<h3>April 10, 2023</h3>
+<h3>April 16, 2023</h3>
 <i>This is a current work in progress. Updates are being rolled out daily.</i>
 <h1>A Simple File System</h1>
 <p>
@@ -44,7 +44,8 @@
         section contains 16-bytes, and each pointer is a single byte, <b>each file can contain up to 16 blocks</b>. Each
         block contains 1024 bytes (1kB).
         Our FS can support in total 2^8= <b>256 blocks</b>. Thus, the address stored by our block pointer can be
-        anywhere from 0-255. <b>Block 0 contains all extents in our FS</b>. We refer to this block as a <b>Super Block</b>. Because this block (like all others) is 1024
+        anywhere from 0-255. <b>Block 0 contains all extents in our FS</b>. We refer to this block as a <b>Super
+            Block</b>. Because this block (like all others) is 1024
         bytes in size, it can hold a maximum of
     </p>
     <latex-code>1024 \text{ Bytes}/ \frac{32 \text{ Bytes}}{\text{ extent}} = 32 \text{ extents}</latex-code>
@@ -53,7 +54,7 @@
         can have up to
     </p>
 
-    <latex-code>256 \text{ Blocks}/\frac{32 \text{ Bytes}}{\text{extenet}} = 16 \text{ Files}</latex-code>   
+    <latex-code>256 \text{ Blocks}/\frac{32 \text{ Bytes}}{\text{extenet}} = 16 \text{ Files}</latex-code>
 
     <h2>Disk</h2>
     <p>
@@ -88,8 +89,10 @@
 <button class="collapsible active">Data Access &#9207;</button>
 <div class="collapsible-content">
     <p>
-        We will begin our coding process with the following <a href="https://github.com/kahleeeb3/cpmFS/releases/tag/v1.0.0">provided source code</a>.
-        In this provided code is a file named <b>diskSimulator.c</b>. This file contains the <b>readImage()</b> and <b>blockRead()</b> functions as well
+        We will begin our coding process with the following <a
+            href="https://github.com/kahleeeb3/cpmFS/releases/tag/v1.0.0">provided source code</a>.
+        In this provided code is a file named <b>diskSimulator.c</b>. This file contains the <b>readImage()</b> and
+        <b>blockRead()</b> functions as well
         as a global variable named <b>disk</b>.
     </p>
 
@@ -102,7 +105,8 @@
         static uint8_t disk[256][1024];
     </script>
     <p>
-        The <b>readImage()</b> function takes in a file name string and reads the contents of the file into the disk variable.
+        The <b>readImage()</b> function takes in a file name string and reads the contents of the file into the disk
+        variable.
     </p>
     <script type="text/plain" class="language-c">
         size_t readImage(char *fileName) { 
@@ -115,12 +119,14 @@
             return bytesRead;
         }
     </script>
-    
+
     <!-- READING BLOCKS -->
     <h2>Reading Blocks</h2>
     <p>
-        The disk is comprised of 256 blocks. To access the data of a single block, we will use a function called <b>blockRead()</b>.
-        This function takes a pointer to a buffer and a blockNum value, and reads the contents of the specified block from the disk array into the buffer.
+        The disk is comprised of 256 blocks. To access the data of a single block, we will use a function called
+        <b>blockRead()</b>.
+        This function takes a pointer to a buffer and a blockNum value, and reads the contents of the specified block
+        from the disk array into the buffer.
     </p>
     <script type="text/plain" class="language-c">
         int blockRead(uint8_t *buffer,uint8_t blockNum) { 
@@ -135,12 +141,15 @@
     <!-- READING EXTENTS -->
     <h2>Reading Extents</h2>
     <p>
-        Extents are stored in block 0 of the disk. Block 0 contains a total of 32 extents. To read a single extent from the disk,
-        we will be defining our own function <b>mkDirStruct()</b> within the <b>cpmfsys.c</b> file of the source code. This function
-        will load the data stored within the extent into a <b>dirStructType</b> data structure. We will refer to block 0 by defining
-        a pointer we will name <b>"e"</b>. To extract a single extent, we will use another pointer named <b>"d"</b>.        
+        Extents are stored in block 0 of the disk. Block 0 contains a total of 32 extents. To read a single extent from
+        the disk,
+        we will be defining our own function <b>mkDirStruct()</b> within the <b>cpmfsys.c</b> file of the source code.
+        This function
+        will load the data stored within the extent into a <b>dirStructType</b> data structure. We will refer to block 0
+        by defining
+        a pointer we will name <b>"e"</b>. To extract a single extent, we will use another pointer named <b>"d"</b>.
     </p>
-    
+
     <script type="text/plain" class="language-c">
         DirStructType  *mkDirStruct(int index,uint8_t *e) {
             // retrieve mem addr of desired extent
@@ -196,8 +205,114 @@
         From this point, our goal will be developing the following functions in source code file <b>cpmfsys.c</b>:
     </p>
     <h3>1. mkDirStruct()</h3>
-    <p>Given a pointer to block 0 (<b>e</b>) and an extent index, this function allocates memory and populates a <b>DirStructType</b></p>
-    <!-- <script type="text/plain" class="language-c">
+    <p>
+        Given a pointer to block 0 (<b>e</b>) and an extent index, this function allocates memory and populates a
+        <b>DirStructType</b>
+    </p>
+
+    <h3>2. writeDirStruct()</h3>
+    <p>writes contents of a <b>DirStructType</b> to the given extent index in block 0 (<b>e</b>)</p>
+
+    <h3>3. makeFreeList()</h3>
+    <p>generates a boolean list (<b>FreeList</b>) of all blocks that are free/unused. The data structure for the free
+        list is a <b>bit vector</b>.</p>
+    <script type="text/plain" class="language-c">
+        #define NUM_BLOCKS 256
+        bool freeList[NUM_BLOCKS];
+    </script>
+
+    <h3>4. printFreeList()</h3>
+    <p>debugging function which prints a 16x16 array of the free blocks given by the <b>FreeList</b>. Each row is
+        prefixed by the hex address of the first block in that row. We will use a * symbol to denote a used block</p>
+    <script type="text/plain" class="language-markup">
+        0: * . * . * . * . * . * . * . * . 
+        10: * . . . . . . . . . . . . . . . 
+        20: * . . . * . . . . . . . . . . . 
+        30: * * . . . . . . . . . . . . . . 
+        40: . . . . . . . . . . . . . . . . 
+        50: . . . . . . . . . . . . . . . . 
+        60: . . . . . . . . . . . . . . . . 
+        70: . . . . . . . . . . . . . . . . 
+        80: . . . . . . . . . . . . . . . . 
+        90: . . . . . . . . . . . . . . . . 
+        a0: * . . . * . . . . . . . . . . . 
+        b0: . . . . . . . . . . . . . . . . 
+        c0: . . . . . . . . . . . . . . . . 
+        d0: . . . . . . . . . . . . . . . . 
+        e0: . . . . . . . . . . . . . . . . 
+        f0: . * . * . * . * . * . * . * . * 
+    </script>
+
+    <h3>5. cpmDir()</h3>
+    <p>Prints the file directory to stdout. Each filename is printed on its own line, with the file size, in base 10.
+    </p>
+    <script type="text/plain" class="language-markup">
+        DIRECTORY LISTING
+        mytestf1.txt 15874
+        holefile.txt 1152
+        shortf.ps 1032
+        mytestf. 1026
+    </script>
+
+    <h3>6. checkLegalName()</h3>
+    <p>
+        Internal function that checks if file name is valid (name or extension too long, name blank, or illegal
+        characters in name
+        or extension). Returns true for legal name, and false for illegal.
+    </p>
+
+    <h3>7. findExtentWithName()</h3>
+    <p>
+        Internal function which returns the extent nunber 0-31. If name is illegal or not found, returns -1.
+    </p>
+
+    <h3>8. cpmDelete()</h3>
+    <p>
+        deletes the file named "name", and frees its disk blocks in the free list.
+    </p>
+
+    <h3>9. cpmRename()</h3>
+    <p>
+        reads directory block, modifies the extent for file named <b>oldName</b> with <b>newName</b>, and writes to the
+        disk.
+    </p>
+
+</div>
+
+<!-- PROGRAMMING STEPS -->
+<button class="collapsible active">Solution Steps &#9207;</button>
+<div class="collapsible-content">
+    <p>
+        <b>This is a work in progress</b>. Now we discuss how to impliment our program solutions. We will be testing our code development using
+        the <b>main()</b> function found within the <b>fsysdriver.c</b> file.
+    </p>
+    <script type="text/plain" class="language-c">
+        int main(int argc, char * argv[]) { 
+            uint8_t buffer1[BLOCK_SIZE],buffer2[BLOCK_SIZE]; 
+            int i; 
+            readImage("image1.img"); 
+            makeFreeList(); 
+            cpmDir(); 
+            printFreeList(); 
+            cpmDelete("shortf.ps");
+            cpmDir();
+            cpmRename("mytestf1.txt","mytest2.tx");
+            fprintf(stdout,"cpmRename return code = %d,\n",cpmRename("mytestf","mytestv2.x")); 
+            cpmDir(); 
+            printFreeList(); 
+          }
+    </script>
+    <p>
+        The output of this code should look something like the following:
+    </p>
+    <script type="text/plain" class="language-c">
+        // I dont know yet
+    </script>
+    <p>
+        The remainer of this section will discuss the implimentation of each of the <b>nine functions</b> in detail.
+    </p>
+    <h3>1. mkDirStruct()</h3>
+    <script type="text/plain" class="language-c">
         // copy contents of extent (index) from block 0 pointer (e)
         DirStructType  *mkDirStruct(int index, uint8_t *e) {
 
@@ -234,55 +349,51 @@
 
             return d;
           }
-    </script> -->
+    </script>
 
     <h3>2. writeDirStruct()</h3>
-    <p>writes contents of a <b>DirStructType</b> to the given extent index in block 0 (<b>e</b>)</p>
     <script type="text/plain" class="language-c">
         void writeDirStruct(DirStructType *d, uint8_t index, uint8_t *e) {
             /* Add your code here */
         }
     </script>
-    
+
     <h3>3. makeFreeList()</h3>
-    <p>generates a boolean list (<b>FreeList</b>) of all blocks that are free/unused.</p>
     <script type="text/plain" class="language-c">
-        #define NUM_BLOCKS 256
-        bool freeList[NUM_BLOCKS];
+        void makeFreeList() {
+            // set initial values
+            for(i=1; i<NUM_BLOCKS; i++){
+                freeList[i] = true; // by default, mark it as unused (true)
+            }
+            freeList[0] =  false; // the superblock is always in use
+
+            // get block pointer values from the extents
+            for(the ith extent in block0){
+                d = makeDirStruct(i, block0); //get a single extent
+                // if the status is valid
+                if(d->status is "used"){
+                    // scan the block pointers
+                    for(i=0; i<16; i++){
+                        // if the block is not invalid
+                        if(d->blocks[i] != 0){
+                            freeList[d->blocks[i]] = false;
+                        }
+                    }
+                }
+            }
+        }
     </script>
 
     <h3>4. printFreeList()</h3>
-    <p>debugging function which prints a 16x16 array of the free blocks given by the <b>FreeList</b>. Each row is prefixed by the hex address of the first block in that row. We will use a * symbol to denote a used block</p>
-    <script type="text/plain" class="language-markup">
-        0: * . * . * . * . * . * . * . * . 
-        10: * . . . . . . . . . . . . . . . 
-        20: * . . . * . . . . . . . . . . . 
-        30: * * . . . . . . . . . . . . . . 
-        40: . . . . . . . . . . . . . . . . 
-        50: . . . . . . . . . . . . . . . . 
-        60: . . . . . . . . . . . . . . . . 
-        70: . . . . . . . . . . . . . . . . 
-        80: . . . . . . . . . . . . . . . . 
-        90: . . . . . . . . . . . . . . . . 
-        a0: * . . . * . . . . . . . . . . . 
-        b0: . . . . . . . . . . . . . . . . 
-        c0: . . . . . . . . . . . . . . . . 
-        d0: . . . . . . . . . . . . . . . . 
-        e0: . . . . . . . . . . . . . . . . 
-        f0: . * . * . * . * . * . * . * . * 
+    <script type="text/plain" class="language-c">
+        void printFreeList() {
+            /* Add your code here */
+          
+        }
     </script>
 
     <h3>5. cpmDir()</h3>
-    <p>Prints the file directory to stdout. Each filename is printed on its own line, with the file size, in base 10.</p>
-    <script type="text/plain" class="language-markup">
-        DIRECTORY LISTING
-        mytestf1.txt 15874
-        holefile.txt 1152
-        shortf.ps 1032
-        mytestf. 1026
-    </script>
-    
-    <!-- <script type="text/plain" class="language-c">
+    <script type="text/plain" class="language-c">
         // scan block 0 and print data of all extents
         void cpmDir() {
             // get the block0 pointer
@@ -310,28 +421,52 @@
                 }
             }
         }
-    </script> -->
+    </script>
 
     <h3>6. checkLegalName()</h3>
-    <p> 
-        Internal function that checks if file name is valid (name or extension too long, name blank, or illegal characters in name
-        or extension). Returns true for legal name, and false for illegal.
-    </p>
+    <script type="text/plain" class="language-c">
+        bool checkLegalName(char *name) {
+            /* Add your code here */
+          
+          
+        }
+    </script>
 
     <h3>7. findExtentWithName()</h3>
-    <p>
-        Internal function which returns the extent nunber 0-31. If name is illegal or not found, returns -1.
-    </p>
+    <script type="text/plain" class="language-c">
+        int findExtentWithName(char *name, uint8_t *block0) {
+            // check for valid name (no special char, punction, blanks, or controls)
+            // split name into file_name & ext_name
+            // add terminator '\0' into file_name & ext_name
+            for(all ith extenet in block0){
+                // make the dir struct
+                // get the file name & ext
+                // check for match
+                if( strcmp(d->name,file_name) && strcmp(d->ext,ext_name) ){
+                    // check file is valid
+                    if(d->status is used){
+                        return i; // file found, return
+                    }
+                }
+            }
+            return -1; // file not found in directory block
+        }
+    </script>
 
     <h3>8. cpmDelete()</h3>
-    <p>
-        deletes the file named "name", and frees its disk blocks in the free list.
-    </p>
+    <script type="text/plain" class="language-c">
+        int cpmDelete(char *fileName) {
+            /* Add your code here */
+          
+        }
+    </script>
 
     <h3>9. cpmRename()</h3>
-    <p>
-        reads directory block, modifies the extent for file named <b>oldName</b> with <b>newName</b>, and writes to the disk.
-    </p>
+    <script type="text/plain" class="language-c">
+        int cpmRename(char *oldName, char *newName) {
+            /* Add your code here */
+        }
+    </script>
 
     <!--
     <script type="text/plain" class="language-c">
@@ -342,11 +477,4 @@
         d->RC = (e + index * EXTENT_SIZE)[15]; // +2 bc RC is 2 bytes
     </script>
     -->
-
-</div>
-
-<!-- PROGRAMMING STEPS -->
-<button class="collapsible active">Solution Steps &#9207;</button>
-<div class="collapsible-content">
-    <p>Now we discuss how to impliment</p>
 </div>
