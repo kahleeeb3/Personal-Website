@@ -27,12 +27,12 @@
 
     <h2>Extent</h2>
     <p>
-        Every file within our file system will have an associated <b>extent</b>. The extenet (also called the <b>File
+        Every file within our file system will have an associated <b>extent</b>. The extent (also called the <b>File
             Control Block</b> or Directory Entry) is a
         struct that contains exactly 32 bytes. These 32 bytes are split into two 16-byte sections. The first 16-byte
         section contains basic information about the file.
-        The first byte of this section contains the file <b>status</b>. To delete a file, we simple mark its status as
-        invalid. The next next 8 bytes contain the file <b>name</b>.
+        The first byte of this section contains the file <b>status</b>. To delete a file, we simply mark its status as
+        invalid. The next 8 bytes contain the file <b>name</b>.
         The next 3 bytes are reserved for the file <b>extension</b> name. The final 4 bytes are reserved for
         <b>XL,BC,XH, and RC</b>. We will cover these later but for now we will say
         that XL, and XH are reserved/unused for if we want to change the file system structure in the future. For now,
@@ -57,7 +57,7 @@
         can have up to
     </p>
 
-    <latex-code>256 \text{ Blocks}/\frac{32 \text{ Bytes}}{\text{extenet}} = 16 \text{ Files}</latex-code>
+    <latex-code>256 \text{ Blocks}/\frac{32 \text{ Bytes}}{\text{extent}} = 16 \text{ Files}</latex-code>
 
     <h2>Disk</h2>
     <p>
@@ -372,7 +372,7 @@
         free(d); // free data used by malloc
     </script>
     <p>
-        Now that the extenet has been located by name, the functionalities of cpmDelete() and cpmRename() differ. cpmDelete() will need to iterate over the blocks in the
+        Now that the extent has been located by name, the functionalities of cpmDelete() and cpmRename() differ. cpmDelete() will need to iterate over the blocks in the
         extent and label them as free in the freeList. It will also need to change the status of the dir struct to be invalid (essentially marking it as deleted). cpmRename()
         needs to check that the name string is a valid file name. It will do this using a function called <b>checkLegalName()</b>. This function ensures that the file name length
         and extension length will fit into the buffer and do not contain any invalid characters. Once the file name is confirmed to be valid, cpmRename() will change the 
