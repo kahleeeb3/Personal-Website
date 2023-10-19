@@ -20,3 +20,7 @@ if(mobile){
 }
 ```
 - add a latex code cell
+
+```
+python3 -m http.server
+```
