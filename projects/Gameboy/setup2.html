@@ -1,0 +1,402 @@
+<h3>May 7, 2023</h3>
+<h1>Game Boy Development</h1>
+<p>
+    The goal of this project is to develop programs for the Nintendo Game Boy Advance using the C programming language. The Game Boy Advance (GBA) comes in several different 
+    variations with similar hardware. Being released in 2003, the Game Boy Advance SP was my first childhood handheld console. The GBA also has the benefit of being a very 
+    well documented console so research on its hardware and development libraries such as "Tonc" are very accessible to the average person.
+</p>   
+    
+<p>
+    The first step in our project is to identify what exactly we would like to create. Because the GBA is a gaming console, logically the choice would be a game. Since I am already
+    paying homage to my past by choosing a childhood console, I decided to recreate my first game I ever made. This game was originally developed as a project for the first
+    Computer Science Course I had ever taken. It was developed using the Scratch visual programming language created by MIT Media Lab and can be found 
+    <a href="https://scratch.mit.edu/projects/333222819/">here</a>.
+</p>
+
+<p>
+    We will begin our development by first explaining how the development environment is setup.
+</p>
+
+<button class="collapsible active">Setup &#9207;</button>
+<div class="collapsible-content">
+    <p>
+        Because useful tools such as "make" are not conveniently available in Windows, we will be using a linux distribution for our development. I have chosen to use <b>Windows Subsystem for Linux (WSL)</b>.
+        WSL is a feature of Windows that allows developers to run a Linux environment without the need for a separate virtual machine or dual booting. Additionally, we will need a compiler that can turn C code 
+        into a GBA binary. For this I have chosen to use <b>devkitPro</b>, which is based on the GNU compiler collection (GCC). We will also need a program capable of running our compiled binaries for testing
+        purposes. There are many options available for this, but I have chosen to go with <b>mGBA</b>. If you would like to run your compiled code on actual hardware, I suggest purchasing a
+        <a href="https://a.co/d/22hul8W">EZ-FLASH OMEGA</a> from a source such as Amazon.
+        The following section will cover the setup process. If you would prefer a video format, I found 
+        Cinemint Tech Tips' <a href="https://www.youtube.com/watch?v=EMeie_gSgDU&ab_channel=CinemintTechTips">YouTube Video</a> to be a very helpful source. Additionally, a useful programming library that you can use is 
+        <b>Tonc v1.4.2</b>. This library comes with very useful documentation that can be found <a href="https://www.coranac.com/tonc/text/toc.htm">here</a>.
+    </p>
+
+    <p>
+        We will begin our setup by <a href="https://learn.microsoft.com/en-us/windows/wsl/install">installing WSL</a>. This is a very simple process and only requires you to open Windows Command Prompt in
+        administrator mode and enter the following command:
+    </p>
+    <script type="text/plain" class="language-markup">
+        wsl --install
+    </script>
+    <p>
+        The distro I chose was Ubuntu, but you can pick any you would like. Now that we have WSL setup, we need to <a href="https://devkitpro.org/">install devkitPro</a> on WSL. We will install this using "pacman".
+        Since we are using WSL, we will first need to create a symbolic link using the following command in WSL prompt.
+    </p>
+
+    <script type="text/plain" class="language-markup">
+        sudo ln -s /proc/self/mounts /etc/mtab
+    </script>
+
+    <p>
+        Since Ubuntu is a Debian based system, we can use this script that sets up the repository for devkitPro pacman.
+    </p>
+
+    <script type="text/plain" class="language-markup">
+        wget https://apt.devkitpro.org/install-devkitpro-pacman
+        chmod +x ./install-devkitpro-pacman
+        sudo ./install-devkitpro-pacman
+    </script>
+
+    <p>
+        devkitPro provides libraries for many systems, however, we are only interested in the one used for GBA development. To install this we will run the following:
+    </p>
+
+    <script type="text/plain" class="language-markup">
+        sudo dkp-pacman -S gba-dev
+    </script>
+
+    <p>
+        Now we will need to define some environment variables so that we can reference devkitPro by name in our makefile. To do so run the following commands:
+    </p>
+
+    <script type="text/plain" class="language-markup">
+        export DEVKITPRO=/opt/devkitpro
+        export DEVKITARM=/opt/devkitpro/devkitARM
+        export DEVKITPPC=/opt/devkitpro/devkitPPC
+    </script>
+    
+    <p>
+        Navigate to the folder containing your code. For me that is stored in <i>/mnt/c/Users/powel/Downloads/Programming/Gameboy</i>. devkitPro provides some sample code to
+        get you started in the <i>devkitPro\examples\gba\template</i> folder. Since I will be using Visual Studio Code (VSC) as my development environment I will simply type 
+    </p>
+        
+    <script type="text/plain" class="language-markup">
+        code .
+    </script>
+
+    <p>
+        This will open your development path in VSC and allow for building using the "make" command.
+    </p>
+</div>
+
+<!-- OVERVIEW -->
+<button class="collapsible active">Overview &#9207;</button>
+<div class="collapsible-content">
+
+    <p>
+        The memory sections we will mostly use follow below. For more details on hardware specifications, I recommend referencing the <a href="http://www.cs.rit.edu/~tjh8300/CowBite/CowBiteSpec.htm">CowBite Spec</a>.
+    </p>
+
+    <table border="1" cellspacing="0" cellpadding="2">
+        <colgroup>
+            <col span="8" valign="top">
+        </colgroup>
+        <tbody>
+            <tr>
+                <th>area </th>
+                <th>start </th>
+                <th>end </th>
+                <th>length </th>
+                <th>port-size </th>
+                <th>description
+                </th>
+            </tr>
+            <tr>
+                <th>IO RAM </th>
+                <td><code>0400:0000h</code> </td>
+                <td><code>0400:03FFh</code>
+                </td>
+                <td>1kb </td>
+                <td>16 bit
+                </td>
+                <td>
+                    control graphics, sound, buttons and other features.
+                </td>
+            </tr>
+            <tr>
+                <th>PAL RAM </th>
+                <td><code>0500:0000h</code> </td>
+                <td><code>0500:03FFh</code>
+                </td>
+                <td>1kb </td>
+                <td>16 bit
+                </td>
+                <td>Memory for two palettes containing 256 entries of 15-bit colors
+                    each. The first is for backgrounds, the second for sprites.
+                </td>
+            </tr>
+            <tr>
+                <th>VRAM </th>
+                <td><code>0600:0000h</code> </td>
+                <td><code>0601:7FFFh</code>
+                </td>
+                <td>96kb </td>
+                <td>16 bit
+                </td>
+                <td>
+                    Video RAM. This is where the data used for backgrounds and
+                    sprites are stored. The interpretation of this data depends
+                    on a number of things, including video mode and background and
+                    sprite settings.
+                </td>
+            </tr>
+            <tr>
+                <th>OAM </th>
+                <td><code>0700:0000h</code> </td>
+                <td><code>0700:03FFh</code>
+                </td>
+                <td>1kb </td>
+                <td>32 bit
+                </td>
+                <td>
+                    Object Attribute Memory. This is where you control the
+                    sprites.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        For simple games like the one we are creating, it will suffice to load your graphics data into <b>PAL and VRAM</b> and use <b>IO and OAM</b> 
+        to take care of the actual interactions. As a simple example usage, consider this code provided by the <a href="https://www.coranac.com/tonc/text/first.htm">Tonc documentation</a>:
+    </p>
+
+    <script type="text/plain" class="language-c">
+        #include <tonc.h>
+
+        int main()
+        {
+            REG_DISPCNT= DCNT_MODE3 | DCNT_BG2;
+        
+            m3_plot( 120, 80, CLR_RED );
+            m3_plot( 136, 80, CLR_LIME );
+            m3_plot( 120, 96, CLR_BLUE );
+        
+            while(1);
+        
+            return 0;
+        }
+    </script>
+
+    <p>
+        The tonc library offers a lot of useful code to make displaying information useful. For better understanding of the functionality here, consider the
+        following defines in the tonc library
+    </p>
+
+    <script type="text/plain" class="language-c">
+        // from tonc_memmap.h
+        #define MEM_IO      0x04000000
+        #define REG_DISPCNT     *((volatile u32*)(MEM_IO+0x0000))
+
+        // from tonc_memdef.h
+        #define DCNT_MODE3      0x0003
+        #define DCNT_BG2        0x0400
+
+        // from tonc_video.h
+        #define SCREEN_WIDTH   240
+        #define vid_mem     ((u16*)MEM_VRAM)
+
+        INLINE void m3_plot(int x, int y, COLOR clr)
+        {   vid_mem[y*SCREEN_WIDTH+x]= clr;    }
+
+        #define CLR_RED     0x001F
+        #define CLR_LIME    0x03E0
+        #define CLR_BLUE    0x7C00
+    </script>
+
+    <p>
+        In the main() function, the <b>REG_DISPCNT</b> (Register Display Primary Control) register is set to a combination of the <b>DCNT_MODE3</b> and <b>DCNT_BG2</b> constants.
+        This configures the GBA to use video mode 3 (which has a resolution of 240x160 pixels and supports 16-bit color) and to display graphics on background layer 2.
+        We are then using the <b>m3_plot()</b> function to draw three pixels of different colors on the screen. The first two arguments to m3_plot() specify the x and
+        y coordinates of the pixel, and the third argument is the color to draw. This is just a simple example of how we will use the TONC library for basic display.
+        We will discuss video modes and background layers in further detail in a later section.
+    </p>
+
+</div>
+
+<!-- SPRITES -->
+<button class="collapsible active">Sprites &#9207;</button>
+<div class="collapsible-content">
+    <p>
+        The GBA allows for 128 unique sprites. Sprites are composed of a number of 8x8 pixel mini-bitmaps called tiles. Tiles come in two types: 4bpp (s-tiles, 32 bytes long) and 8bpp (d-tiles, 64 bytes long).
+        4bpp stands for "4 bits per pixel" and can represent up to 16 different colors (2^4). 4bpp can also be more memory-efficient than 8bpp, as it requires less memory
+        to store the color information for each pixel. Since our sprites will be very simple, 4bpp should suffice. Sprites can have the following sizes:
+    </p>
+
+    <table id="tbl-obj-size" class="reg" border="1" cellpadding="2" cellspacing="0" title="tbl-obj-size">
+        <tbody>
+            <tr>
+                <td>shape\size </td>
+                <th>00 </th>
+                <th>01 </th>
+                <th>10 </th>
+                <th>11
+                </th>
+            </tr>
+            <tr>
+                <th>00</th>
+                <td>8x8 </td>
+                <td>16x16 </td>
+                <td>32x32 </td>
+                <td>64x64
+                </td>
+            </tr>
+            <tr>
+                <th>01</th>
+                <td>16x8 </td>
+                <td>32x8 </td>
+                <td>32x16 </td>
+                <td>64x32
+                </td>
+            </tr>
+            <tr>
+                <th>10</th>
+                <td>8x16 </td>
+                <td>8x32 </td>
+                <td>16x32 </td>
+                <td>32x64
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        We will choose our character sprite to be 32x32 pixels. However, we will store 4 of them on a sprite sheet of 64x64 pixels wide. This will allow for easy use of
+        animation by simply changing some of the sprite attributes without taking up an additional sprite slot. Our sprite sheet is provided below:
+    </p>
+
+    <div align="center">
+        <img src="/projects/Gameboy/files/player.bmp" id="figure" style="width: 5%;" />
+    </div>
+
+    <p>
+        To create this sprite sheet I used a program called Usenti. This allows for drawing individual pixels and exporting them to bitmaps (bmp files) with 4bpp.
+        Once the bitmap is exported, we will use another program called <a href="https://www.coranac.com/projects/grit/">grit</a>.
+        Simply open our sprite sheet image (with File->Open), and you should see it in the GUI window. Once you see the image, 
+        we need to open the export window, so go to View->GBAExport, and you should see this rather intimidating window pop up:
+    </p>
+
+    <div align="center">
+        <img src="/projects/Gameboy/files/exportwindow.png" id="figure" style="width: 40%;" />
+    </div>
+
+    <p>
+        First, we need to make sure that we've set the exported to 4 bpp, you'll find that option in the top right of the window. 
+        Next, tell it to export .h/.c files, so in the “File” section, set the type to “C (*.c),” you'll also want to set where the 
+        exported files should go in the target text field above the type dropdown. Finally, we need to set the size of our sprite, 
+        which, for our character sprites means setting the “Meta/Obj” section to square, size 4, which corresponds to 32x32 pixel sprites.
+    </p>
+
+    <p>
+        Finally, we want to export the data as unsigned integers. I read that you may end up running into "weirdness" with memcpy
+        at some point with smaller sizes. To make the data more readable, try setting a smaller size.
+    </p>
+
+    <p>
+        Once all that is set up, click ok, and you should see a success popup. Now just move your newly created c/h files into their
+        respective folders. Now we can use the following code to get our sprite loaded into the game.
+    </p>
+
+    <script type="text/plain" class="language-c">
+        #include <string.h>
+        #include <tonc.h>
+        #include "player.h"
+        
+        OBJ_ATTR obj_buffer[128]; // allocate space for 128 sprites
+        OBJ_ATTR *player= &obj_buffer[0]; // define the player sprite
+        
+        int main()
+        {
+            
+            oam_init(obj_buffer, 128); // initialize 128 sprites
+        
+            // Display =   Mode 0| Background 0| Enable Objects | OBJ-VRAM as array
+            REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_OBJ | DCNT_OBJ_1D;
+            
+            // create sprite
+            memcpy(&tile_mem[4][0], playerTiles, playerTilesLen); // copy sprite tiles
+            memcpy(pal_obj_mem, playerPal, playerPalLen); // copy sprite pallets
+            
+            obj_set_attr(player, 
+                ATTR0_4BPP, // set as 4bpp
+                ATTR1_SIZE_32, // 32x32 pixel sprite
+                0);
+        
+            obj_set_pos(player, 96, 32);
+            
+            
+            // update 1 sprite of data in OAM
+            oam_copy(oam_mem, obj_buffer, 1);
+            
+            while(1);
+        
+            return 0;
+        }
+    </script>
+    <p>
+        Before we talk about what this does, I'd like to give a special thanks to <a href="http://kylehalladay.com/blog/tutorial/gba/2017/06/02/GBA-By-Example-5.html">Kyle Halladay</a> 
+        for his useful article on the subject.
+    </p>
+
+    <p>
+        To animate our character, we simply need to change the attr2 value. This attribute is the index of the tile to use to render the top left most part of your sprite.
+        Since our sprite is 32x32 pixels (4x4 tiles at 8 pixels each), to advance a whole frame, our attr2 value must increase by 16 since that is the number of tiles within
+        a single frame. To demonstrate this, consider the following code:
+    </p>
+
+    <script type="text/plain" class="language-c">
+        void input()
+        {
+            while(1)
+            {
+                vid_vsync(); // wait for VBlank
+                key_poll(); // poll user input
+                    
+                u16 frame1 = 0; // first frame
+                u16 frame2 = 16; // second frame
+                u16 frame3 = 32; // third frame
+                u16 frame4 = 48; // fourth frame
+                
+                if(key_hit(KEY_LEFT))
+                    player->attr2 = frame1;
+                    
+                if(key_hit(KEY_RIGHT))
+                    player->attr2 = frame2;
+
+                if(key_hit(KEY_UP))
+                    player->attr2 = frame3;
+
+                if(key_hit(KEY_DOWN))
+                    player->attr2 = frame4;
+                
+                if(key_hit(KEY_A))
+                    player->attr2 = (player->attr2 + 16) % 64;
+                
+                oam_copy(oam_mem, obj_buffer, 1);	// update 1 sprite in obj_buffer
+
+            }
+        }
+    </script>
+
+    <p>
+        If you replace the <b>while(1);</b> line with <b>input();</b>, you can run the above. The function takes user input using the <b>key_poll()</b> function.
+        Then we simply shift change the quantity of the attr2 depending on which key was pressed. To cycle through the frames, press key <a>A</a>. The 
+        modulo operator (%) is used to ensure that the attr2 stays within the range of 64 since that is the maximum number of tiles we have in our sprite set.
+    </p>
+
+</div>
+
+<!-- TILED BACKGROUND -->
+<button class="collapsible active">Tiled Backgrounds &#9207;</button>
+<div class="collapsible-content">
+<p>Tiled Backgrounds</p>
+</div>
