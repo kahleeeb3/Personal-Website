@@ -1,11 +1,18 @@
 {
   "cSpell.words": [
+    "CHARBLOCK",
+    "charblocks",
     "DEVKITARM",
     "DEVKITPPC",
     "devkitpro",
     "Gameboy",
+    "memmap",
     "mgba",
     "mtab",
-    "pacman"
+    "pacman",
+    "Requantize",
+    "tilemap",
+    "Tonclib",
+    "Usenti"
   ]
 }
