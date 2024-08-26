@@ -8,7 +8,6 @@
   average person.
 </p>
 
-<!-- <button class="collapsible active">Setup &#9207;</button> -->
 <button class="collapsible">Development Environment &#9205;</button>
 <div class="collapsible-content">
   <p>
@@ -296,7 +295,7 @@
 <button class="collapsible">Tiles and Palettes &#9205;</button>
 <div class="collapsible-content">
   <p>
-    Images on the GBA are composed of <b>tiles</b> and <b>palettes</b>. The palette is simply a list of the colors used in an image. The pixel values in the image are indices of the palette. The image is broken into 8x8 pixel segments called tiles. The tiles form a bitmap of the image.
+    Images on the GBA are composed of <b>tiles</b> and <b>palettes</b>. The palette is simply an array of the colors used in an image. The pixel values in the image are indices of the palette. The image is broken into 8x8 pixel segments called tiles. The tiles form a bitmap of the image.
   </p>
 
   <div align="center">
@@ -441,7 +440,7 @@
 
 </div>
 
-<button class="collapsible active">Tiled Background &#9207;</button>
+<button class="collapsible">Tiled Background &#9205;</button>
 <div class="collapsible-content">
   <p>
     So remember how I was just saying VRAM is divided into 16KB chunks called charblocks and the first 4 charblocks are for background tiles? Yeah that's not exactly the whole story. VRAM is actually divided into both <b>charblocks</b> and <b>screenblocks</b>. Each screenblock is 2048 bytes (0x800) long, giving <b>32 screenblocks</b> in the first 4 charblocks. Charblocks and screenblocks use the same addresses in memory. This means <b>they overlap</b>. 
@@ -526,4 +525,102 @@
     #define se_mem      ((SCREENBLOCK*)MEM_VRAM)
   </script>
 
+</div>
+
+<button class="collapsible">Creating Sprite Data &#9205;</button>
+<div class="collapsible-content">
+  <p>
+    To create our sprite, we first need to draw it. I prefer to use Photoshop for this but there are many tools available and you cant really go wrong. Just remember your sprite must be a set size. I will list the possible sizes below:
+  </p>
+
+  <table id="tbl-obj-size" class="reg" border="1" cellpadding="2" cellspacing="0" title="tbl-obj-size" align="center">
+    <tbody>
+      <tr>
+        <td>shape\size </td>
+        <th>00 </th>
+        <th>01 </th>
+        <th>10 </th>
+        <th>11
+        </th>
+      </tr>
+      <tr>
+        <th>00</th>
+        <td>8x8 </td>
+        <td>16x16 </td>
+        <td>32x32 </td>
+        <td>64x64
+        </td>
+      </tr>
+      <tr>
+        <th>01</th>
+        <td>16x8 </td>
+        <td>32x8 </td>
+        <td>32x16 </td>
+        <td>64x32
+        </td>
+      </tr>
+      <tr>
+        <th>10</th>
+        <td>8x16 </td>
+        <td>8x32 </td>
+        <td>16x32 </td>
+        <td>32x64
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Once we have created our sprite image, we need to use a tool called <a href="https://www.gbadev.org/tools.php?showinfo=1441">Usenti</a> to convert it to C code. I will provide a sprite that I made of my friend Will for you to use as an example:
+  </p>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/Will.bmp" id="figure" style="width: 5%;">
+  </div>
+
+  <p>
+    Simply download this file, and open it in Usenti. You should see a window that looks like this:
+  </p>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/Usenti1.png" id="figure" style="width: 20%;">
+  </div>
+
+  <p>
+    You first want to make sure you have the correct number of colors by selecting <b>Palette &gt; Requantize</b>. My sprite only uses 8 colors so I will type 8. You can use up to 16 colors in 4bPP or up to 256 in 8bPP. Next, you'll want to reorder your palette by selecting <b>Palette &gt; Sort</b>. I like to sort my palette by ascending brightness beginning from color 0 and ending at color 15. Keep in mind that <b>the first color in your palette is considered transparent</b>. I usually use black for this. 
+  </p>
+  
+  <p>
+    If you want to save your sprite for further editing in the future: I suggest you save it as a <b>bmp file</b>. To do this: you must select <b>File &gt; Save As</b>. I will save my file as <b>Will.bmp</b>. When prompted: you want to select a bit depth of 4 (assuming you are using 4BPP Mode).
+  </p>
+
+  <p>    
+    Now for the scary part: You want to export your image as GBA Source Code by selecting <b>Image &gt; Export</b> and the choose a destination. You will see the following window appear:
+  </p>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/Usenti2.png" id="figure" style="width: 30%;">
+  </div>
+
+  <p>
+    <b>Don't panic</b> this is actually really simple. We want to select all the options that describe how we want our sprite to be formatted. First, select <b>Gfx</b> and ensure that <b>tile</b> is selected and you're using <b>4bpp</b> mode. There is also an option for compression but I could never get that to work properly. 
+  </p>
+  <p>
+    Next, under the <b>Meta/Obj</b> section: select the aspect ratio of your sprite. My sprite is square image made of 4x4 tiles (32x32 pixels). For the <b>Pal</b> section: simply select the number of colors you need to use. My sprite uses 8 colors. Next, you want to make sure <b>h file</b> is selected under the <b>File</b> section. 
+  </p>
+  <p>
+    You may choose to represent your data as either: <b>u8, u16, or u32</b>. Functionally, this makes no difference since your data will still be the same regardless of how you store it. This is more a question of readability. I personally like <b>u16</b> since colors are represented as 16 bit values. Once you are done, click <b>OK</b> and Usenti will export two files:
+    <a href="/projects/Gameboy/files/Will.c"><b>Will.c</b></a> and <a href="/projects/Gameboy/files/Will.h"><b>Will.h</b></a>. These need to be copied to the <b>source</b> and <b>include</b> folders of your workspace respectively. Now that we have the data, we need to write some code to get the sprite displayed on the GBA!
+  </p>
+
+</div>
+
+<button class="collapsible active">Displaying Sprite Data &#9207;</button>
+<div class="collapsible-content">
+  <script type="text/plain" class="language-c">
+    void main()
+    {
+      
+    }
+  </script>
 </div>
