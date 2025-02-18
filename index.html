@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <title>Caleb Powell</title>
+    <link rel="icon" href="/files/Caleb.ico"> <!-- Website icon -->
+    <meta http-equiv="Cache-Control" content="no-cache"> <!-- Dont let browser store cache -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/css/styleCollection.css" />
+    <script src="/src/js/read.js"></script> <!-- Load in HTML -->
+    <script src="/src/js/pdf.js"></script> <!-- PDF in new tab -->
+    <script src="/src/js/prism.js"></script> <!-- Code Syntax Highlighting -->
+    <script src="/src/js/latex-code.js"></script> <!-- Add Latex Code Cell -->
+</head>
+
+<!-- Google tag (gtag.js) for web analytics-->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BF7G1NQPWN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-BF7G1NQPWN');
+</script>
+
+<body class="background">
+    <div id="mySidebar" class="sidebar"></div>
+    <p id="sidebarbtn"></p>
+    <div id="main" class="main" style="margin-left: 250px;"></div>
+</body>
+
+</html>
+
+
+<script>
+    replaceHTML("mySidebar", "/sidebar.html"); // add sidebar info
+    get_page(); // get the page you would like to load
+</script>
+
+<script src="/src/js/sidebar.js"></script> <!-- Sidebar Animation -->
+<script src="/src/js/collapsible.js"></script> <!-- Collapsible Animation -->
+<script src="/src/js/mobile.js"></script> <!-- Changes Element sizes for mobile devices -->
