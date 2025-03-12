@@ -9,6 +9,8 @@ User is going to navigate ?page=<pageName>
         - load: pages/<pageName>/sidebar.html
 */
 
+var currSidebar = "None"; // store which sidebar is currently showing
+
 function getCurrPageName() {
     const queryString = window.location.search; // get current page url
     const urlParams = new URLSearchParams(queryString);
@@ -40,11 +42,16 @@ function replaceHTML(element, file) {
 function getPage(page) {
     // if no page was passed, set page to home
     if (page == null || page.trim() == '') {
-        page = "home";   
+        page = "home";
     }
 
     replaceHTML("content", `pages/${page}/${page}.html`);
-    replaceHTML("sidebar", `pages/${page}/sidebar.html`);
+
+    // replace sidebar if pages/<pageName>/sidebar.html exists:
+    // if (currSidebar != page){
+    //     replaceHTML("sidebar", `pages/${page}/sidebar.html`);
+    //     currSidebar = page
+    // }
     // history.pushState({ page: page }, "", `/?page=${page}`);
 }
 
@@ -53,8 +60,7 @@ function handleInternalLink(href) {
     // handles links to internal web pages
     const url = new URL(href); // get url
     const page = url.searchParams.get('page'); // get page name
-    console.log(page);
-    // getPage(page);
+    getPage(page);
 }
 
 /*
