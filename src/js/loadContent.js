@@ -48,10 +48,17 @@ function getPage(page) {
     replaceHTML("content", `pages/${page}/${page}.html`);
 
     // replace sidebar if pages/<pageName>/sidebar.html exists:
-    // if (currSidebar != page){
-    //     replaceHTML("sidebar", `pages/${page}/sidebar.html`);
-    //     currSidebar = page
-    // }
+    if (currSidebar != page){
+        const HTMLElement = document.getElementById("sidebar");
+        readTextFile(`pages/${page}/sidebar.html`, function(content) {
+            // user can leave an empty sidebar.html file to remove errors
+            if (content != "") {
+                HTMLElement.innerHTML = content;
+                currSidebar = page;
+            }
+        });
+
+    }
     // history.pushState({ page: page }, "", `/?page=${page}`);
 }
 
