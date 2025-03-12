@@ -5,24 +5,22 @@
     <meta http-equiv="Cache-Control" content="no-cache"> <!-- Dont let browser store cache -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- set viewport width and scale to 100% -->
     <link rel="stylesheet" href="/src/css/myStyle.css" /> <!-- Load CSS -->
-    <!-- <script src="/src/js/loadContent.js"></script> -->
+    <script src="/src/js/loadContent.js"></script>
     <script src="/src/js/sidebar.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div id="sidebar" class="sidebar">
-        <button class="closeButton" onclick="closeSidebar()">&#10005;</button>
-    </div>
+    <div id="sidebar" class="sidebar"></div>
     <div id="openSidebar" class="openSidebar">
         <button class="openButton" onclick="openSidebar()">&#9776;</button>
     </div>
     <div id="content" class="content"></div>
 </body>
 
-<!-- <script>
+<script>
     getSidebar(); // load sidebar content
     getPage(); // load page content
-</script> -->
+</script>
 
 </html>
