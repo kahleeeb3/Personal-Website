@@ -48,14 +48,16 @@ function getPage(page) {
     // history.pushState({ page: page }, "", `/?page=${page}`);
 }
 
-/*
+
 function handleInternalLink(href) {
     // handles links to internal web pages
     const url = new URL(href); // get url
     const page = url.searchParams.get('page'); // get page name
-    getPage(page);
+    console.log(page);
+    // getPage(page);
 }
 
+/*
 function handlePopState(event) {
     // Handle the state when the user presses the back/forward button
     const page = event.state ? event.state.page : "home"; // Default to "home" if no state exists
@@ -65,10 +67,8 @@ function handlePopState(event) {
 
 document.addEventListener("DOMContentLoaded", function () {
     getPage(getCurrPageName());
-    /*
-    replaceHTML("sidebar", "sidebar.html"); // load sidebar
 
-    
+     
     // listen for internal links
     document.addEventListener('click', function(event) {
         if (event.target.classList.contains('internal-link') && event.target.hasAttribute('href')) {
@@ -78,6 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Listen for changes in the history (back/forward buttons)
-    window.addEventListener('popstate', handlePopState);
-    */
+    // window.addEventListener('popstate', handlePopState);
+    
 });
