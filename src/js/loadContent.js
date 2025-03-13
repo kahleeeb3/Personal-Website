@@ -9,8 +9,8 @@ User is going to navigate ?page=<pageName>
         - load: pages/<pageName>/sidebar.html
 */
 
-var currSidebar = "None"; // store which sidebar is currently showing
-var currPage = "None"; // store which page is currently displayed
+var currSidebar = null; // store which sidebar is currently showing
+var currPage = null; // store which page is currently displayed
 
 function getCurrPageName() {
     const queryString = window.location.search; // get current page url
@@ -46,24 +46,32 @@ function getPage(page, pushState=true) {
         page = "home";
     }
 
-    replaceHTML("content", `pages/${page}/${page}.html`);
-    document.title = page.replace(/\b\w/g, char => char.toUpperCase()); // capitalize the first letter
+    // if the desired page is not the current one
     if(currPage != page){
+        replaceHTML("content", `pages/${page}/${page}.html`);
+        document.title = page.replace(/\b\w/g, char => char.toUpperCase()); // capitalize the first letter
         currPage = page;
         if(pushState){
             history.pushState({ page: page }, "", `/?page=${page}`);
         }
     }
 
-    // replace sidebar if pages/<pageName>/sidebar.html exists:
+    // if the current sidebar is not the desired one
     if (currSidebar != page){
         const HTMLElement = document.getElementById("sidebar");
         readTextFile(`pages/${page}/sidebar.html`, function(content) {
-            // user can leave an empty sidebar.html file to remove errors
+            // Note: user can keep sidebar.html empty to remove file DNE errors
             if (content != "") {
                 HTMLElement.innerHTML = content;
                 currSidebar = page;
             }
+
+            // edge case where this is the first page loaded
+            if (content == "" && currSidebar == null){
+                replaceHTML("sidebar","pages/home/sidebar.html");
+                currSidebar = "home";
+            }
+
         });
     }
 }
