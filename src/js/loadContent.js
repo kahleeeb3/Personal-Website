@@ -56,6 +56,24 @@ function insertScripts(element, file){
     HTMLElement.appendChild(script);
 }
 
+function insertSidebar(element, file){
+    const HTMLElement = document.getElementById(element);
+
+    // set default sidebar to be home
+    var path = `/pages/${page}/${file}`;
+    if(file == null){
+        path = "/pages/home/sidebar.html"
+    }
+
+    // insert sidebar
+    loadHTML(path, function(newHTML){
+        if(currSidebar != page){
+            HTMLElement.innerHTML = newHTML;
+            currSidebar = page;
+        }
+    });
+}
+
 function insertHTML(element, file){
     const HTMLElement = document.getElementById(element);
 
@@ -63,24 +81,24 @@ function insertHTML(element, file){
         if(currPage != page){
             HTMLElement.innerHTML = newHTML;
             currPage = page;
-            history.pushState({ page: page }, "", `/?page=${page}`);
+            // history.pushState({ page: page }, "", `/?page=${page}`);
         }
     });
 }
 
 function parseJSON(data){
+    if (data.styles != null) {
+        insertStyles(data.styles);
+    } 
+    if (data.sidebar != null) {
+        insertSidebar("sidebar", data.sidebar);
+    }
     if (data.homePage != null) {
         insertHTML("content", data.homePage);
     }
     if (data.scripts != null) {
         insertScripts("content", data.scripts);
     }
-    if (data.styles != null) {
-        insertStyles(data.styles);
-    }
-    // if (data.sidebar != null) {
-    //     console.log("updating sidebar");
-    // }    
 }
 
 document.addEventListener("DOMContentLoaded", function () {
