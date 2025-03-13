@@ -26,9 +26,9 @@
 }
 
 .post>.post-header>.title-date>.title {
+    color: black;
     font-size: 20px;
     font-weight: bold;
-    text-decoration: underline;
     padding-bottom: 25px;
 }
 

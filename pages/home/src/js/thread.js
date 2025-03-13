@@ -11,7 +11,7 @@ function test(data) {
         div.innerHTML = `
         <div class="post-header">
             <div class="title-date">
-                <p class="title">${post.title}</p>
+                <a href="${post.link}" class="title">${post.title}</a>
                 <p class="date">${post.date}</p>
             </div>
             <div class="image">
