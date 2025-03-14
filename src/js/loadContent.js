@@ -128,3 +128,10 @@ document.addEventListener("DOMContentLoaded", function () {
     page = getCurrPageName();
     loadJSON(`/pages/${page}/src/json/page.json`, parseJSON);
 });
+
+document.addEventListener('click', function(event) { 
+    if (event.target.classList.contains('internal-link') && event.target.hasAttribute('href')) {
+        event.preventDefault();
+        console.log("internal links disabled");
+    }
+});
