@@ -1,6 +1,8 @@
 function test(data) {
 
-    const HTMLElement = document.getElementById("thread");
+    const contentDiv = document.getElementById("content");
+    const threadDiv = document.createElement("div");
+    threadDiv.classList.add("thread");
 
     for (const post of data.posts){
 
@@ -23,8 +25,9 @@ function test(data) {
             <p>${post.description}</p>
         `;
         
-        HTMLElement.appendChild(div);
+        threadDiv.appendChild(div);
     }
+    contentDiv.appendChild(threadDiv);
 }
 
 
