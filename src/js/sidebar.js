@@ -10,7 +10,7 @@ function openSidebar() {
 
     // set grid to be 2x1
     if(userOnMobile){
-        document.body.style.gridTemplateColumns = '1fr 0px';
+        document.body.style.gridTemplateColumns = '1fr';
     }
     else{
         document.body.style.gridTemplateColumns = '250px 1fr';
