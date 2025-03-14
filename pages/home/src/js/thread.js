@@ -13,7 +13,7 @@ function test(data) {
         div.innerHTML = `
         <div class="post-header">
             <div class="title-date">
-                <a href="${post.link}" class="title">${post.title}</a>
+                <a href="${post.link}" class="title internal-link">${post.title}</a>
                 <p class="date">${post.date}</p>
             </div>
             <div class="image">
