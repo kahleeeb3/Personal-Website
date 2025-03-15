@@ -52,48 +52,12 @@ function insertScripts(element, file){
     HTMLElement.appendChild(script);
 }
 
-function insertSidebar(element, file){
-    // does page have a dedicated sidebar
-    if(file != null){
-        // is that sidebar already loaded?
-        if(currSidebar == page){
-            // do nothing
-            console.log("This page has a dedicated sidebar but its already been loaded");
-        }
-        else{
-            // load that pages sidebar
-            console.log("This page has a dedicated sidebar but it hasn't been loaded yet");
-            const HTMLElement = document.getElementById(element);
-            const path = `/pages/${page}/${file}`;
+function insertSidebar(element, path){
+    const HTMLElement = document.getElementById(element);
 
-            loadHTML(path, function(newHTML){
-                if(currSidebar != page){
-                    HTMLElement.innerHTML = newHTML;
-                    currSidebar = page;
-                }
-            });
-        }
-    }
-    else{
-        // is the home sidebar already loaded?
-        if(currSidebar == "home"){
-            // do nothing
-            console.log("This page does not have a dedicated sidebar but the home sidebar is already loaded");
-        }
-        else{
-            // load the home page sidebar
-            console.log("This page does not have a dedicated sidebar and the home sidebar is not already loaded");
-            const HTMLElement = document.getElementById(element);
-            const path = "/pages/home/sidebar.html";
-
-            loadHTML(path, function(newHTML){
-                if(currSidebar != page){
-                    HTMLElement.innerHTML = newHTML;
-                    currSidebar = page;
-                }
-            });
-        }
-    }
+    loadHTML(path, function(newHTML){
+        HTMLElement.innerHTML = newHTML;
+    });
 }
 
 function insertHTML(element, file){
@@ -109,19 +73,38 @@ function insertHTML(element, file){
 }
 
 function parseJSON(data){
+    // do nothing if the page is already loaded
     if(page == currPage){
-        return; // don't load pages twice
+        return;
     }
 
-    // load the sidebar
-    insertSidebar("sidebar", data.sidebar);
+    // Get correct sidebar
+    if(data.sidebar == null){
+        if(currSidebar != "home"){
+            console.log("loading /pages/home/sidebar.html");
+            insertSidebar("sidebar", "/pages/home/sidebar.html");
+            currSidebar = "home";
+        }
+    }
+    else{
+        if(currSidebar != page) {
+            console.log(`loading /pages/${page}/${data.sidebar}`);
+            insertSidebar("sidebar", `/pages/${page}/${data.sidebar}`);
+            currSidebar = page;
+        }
+    }
 
+    // get styles for the page
     if (data.styles != null) {
         insertStyles(data.styles);
     }
+
+    // get the page we need
     if (data.homePage != null) {
         insertHTML("content", data.homePage);
     }
+
+    // get the script we need
     if (data.scripts != null) {
         insertScripts("content", data.scripts);
     }

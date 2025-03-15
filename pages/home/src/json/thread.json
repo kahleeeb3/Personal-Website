@@ -1,12 +1,11 @@
 {
     "posts" : [
         {
-            "title" : "Name of Post",
+            "title" : "Web Development",
             "date"  : "March 12, 2025",
             "image" : "https://images.stockcake.com/public/e/e/9/ee9affe4-120f-4e24-bbfc-c890117a4c74_medium/cheerful-yellow-character-stockcake.jpg",
-            "description":
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis tempor enim, in luctus est. Mauris sodales malesuada velit, in fringilla nisl consequat vitae. Donec lorem tellus, vestibulum in pellentesque et, tempor ac elit. Praesent eget mauris efficitur diam interdum molestie non eget turpis. Vivamus dapibus pellentesque ipsum non tempor. Quisque convallis, felis quis sagittis pharetra, dui purus fringilla erat, id tincidunt ex leo nec quam. Aliquam suscipit lorem ac mi scelerisque elementum ac sed tellus. Maecenas aliquam pulvinar augue ullamcorper sodales. Ut vulputate, justo a sollicitudin semper, tortor eros pharetra nibh, sit amet aliquet felis ligula eu nibh. Duis.",
-            "link" : "/"
+            "description": "Place some description here.",
+            "link" : "/?page=web development"
         },
         {
             "title" : "Arduino Uno Oscilloscope",
