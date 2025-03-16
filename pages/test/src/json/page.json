@@ -1,0 +1,6 @@
+{
+    "homePage" : "index.html",
+    "sidebar"  : "alternateSidebar.html",
+    "styles"   : "test.css",
+    "scripts"  : "test.js"
+}
