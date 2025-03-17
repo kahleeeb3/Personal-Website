@@ -1,17 +1,17 @@
 {
     "posts" : [
         {
-            "title" : "Test Page",
-            "date"  : "March 12, 2025",
-            "image" : "https://images.stockcake.com/public/e/e/9/ee9affe4-120f-4e24-bbfc-c890117a4c74_medium/cheerful-yellow-character-stockcake.jpg",
-            "description": "Just a page for testing new web features",
-            "link" : "/?page=test"
+            "title" : "Game Boy - Setup",
+            "date"  : "May 7, 2023",
+            "image" : "/pages/game%20boy/files/wsl-statusbar-indicator.png",
+            "description": "Provide setup instructions for programming a Game Boy Advanced SP using the C programming language.",
+            "link" : "/?page=game boy"
         },
         {
             "title" : "Arduino Uno Oscilloscope",
             "date"  : "November 1, 2021",
             "image" : "/pages/arduino%20oscilloscope/files/setup(1).jpg",
-            "description": "An analysis of Arduino Uno applications through the construction of an Oscilloscope using the C programming language and Amplifier Circuits.",
+            "description": "Overview of how to turn an arduino uno into a basic oscilloscope using operational amplifier circuits.",
             "link": "/?page=arduino oscilloscope"
         }
     ]
