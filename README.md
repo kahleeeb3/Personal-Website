@@ -14,6 +14,7 @@ python3 -m http.server
 - Probably need to make the sidebar scrollable for subpage navigation.
 - when clicking home on mobile, it should close the sidebar by default.
 - clicking images opens a larger view
+- need to account for clicking internal links that don't exist.
 
 <!-- 
 # Notes

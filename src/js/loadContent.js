@@ -117,6 +117,7 @@ window.addEventListener('popstate', function(event){
     page = getCurrPageName();
     // load desired page
     loadJSON(`/pages/${page}/src/json/page.json`, parseJSON);
+    document.title = page.replace(/\b\w/g, char => char.toUpperCase());
 });
 
 // listen for clicking internal links
