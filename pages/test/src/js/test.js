@@ -1,6 +1,5 @@
 function test(){
-    const collapsibleDiv = document.getElementById("collapsible");
-    console.log(collapsibleDiv);
+    console.log("test");
 }
 
 

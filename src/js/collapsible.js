@@ -14,21 +14,21 @@ function toggleCollapsible(event){
 }
 
 function createCollapsible(){
-    const div = document.getElementById("collapsible");
-    const button = document.createElement('button');
+    const divs = document.querySelectorAll(`div#collapsible`);
 
-    if(div.classList.contains("expanded")){
-        button.textContent = div.dataset.title + "\u23F7";
-    }
-    else{
-        div.style.maxHeight = "0px";
-        button.textContent = div.dataset.title + "\u23F5";
-    }
-    
-    button.classList.add("collapsibleButton");
-    button.addEventListener("click", toggleCollapsible);
-    div.parentNode.insertBefore(button, div);
+    divs.forEach(div => {
+        const button = document.createElement('button');
+
+        if(div.classList.contains("expanded")){
+            button.textContent = div.dataset.title + "\u23F7";
+        }
+        else{
+            div.style.maxHeight = "0px";
+            button.textContent = div.dataset.title + "\u23F5";
+        }
+        
+        button.classList.add("collapsibleButton");
+        button.addEventListener("click", toggleCollapsible);
+        div.parentNode.insertBefore(button, div);
+    });
 }
-
-
-createCollapsible();
