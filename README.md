@@ -8,7 +8,6 @@ python3 -m http.server
 ```
 
 # To Do:
-- Add collapsible sections.
 - Add subpage for larger projects.
 - Need to be able to link thread posts to subsections of larger pages.
 - Add version to scripts so the scripts are forced to reload every time.
@@ -16,7 +15,7 @@ python3 -m http.server
 - Need to add a home button on the sidebar.
 - when clicking home on mobile, it should close the sidebar by default.
 
-
+<!-- 
 # Notes
 ```html
 <h1>Prism.js Tutorial</h1>
@@ -67,4 +66,4 @@ python3 -m http.server
 
     }
 </code></pre>
-```
+``` -->
