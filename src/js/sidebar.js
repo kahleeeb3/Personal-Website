@@ -1,50 +1,28 @@
-const mobileScreenWidth = 700; // size to determine if on mobile device
-var userOnMobile = false; // keeps track if the user is on mobile
-
 function openSidebar() {
-    // disable the openSidebar div
-    document.getElementById("openSidebar").style.display = "none";
-
-    // enable sidebar
+    if (window.innerWidth > 990) {
+        document.getElementById("content").style.marginLeft = "250px";
+    }
     document.getElementById("sidebar").style.display = "block";
-
-    // set grid to be 2x1
-    if(userOnMobile){
-        document.body.style.gridTemplateColumns = '1fr';
-    }
-    else{
-        document.body.style.gridTemplateColumns = '250px 1fr';
-    }
-    document.body.style.gridTemplateRows = '1fr';
+    document.getElementById("openSidebarButton").style.display = "none"; 
 }
 
-
 function closeSidebar() {
-    // disable sidebar
+    document.getElementById("content").style.marginLeft = "0px";
     document.getElementById("sidebar").style.display = "none";
-
-    // enable the openSidebar div
-    document.getElementById("openSidebar").style.display = "block";
-
-    // set grid to be 1x2
-    document.body.style.gridTemplateColumns = '1fr';
-    document.body.style.gridTemplateRows = 'auto 1fr';
+    document.getElementById("openSidebarButton").style.display = "block"; 
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    if(window.innerWidth < mobileScreenWidth){
-        userOnMobile = true;
+    if (window.innerWidth < 990) {
         closeSidebar();
     }
 });
 
 window.addEventListener("resize", () => {
-    if(window.innerWidth < mobileScreenWidth){
-        userOnMobile = true;
+    if (window.innerWidth < 990) {
         closeSidebar();
     }
-    else{
-        userOnMobile = false;
+    else {
         openSidebar();
     }
 });
