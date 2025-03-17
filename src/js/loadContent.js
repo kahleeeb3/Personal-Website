@@ -2,17 +2,7 @@ var currSidebar = null; // current sidebar displayed
 var currPage = null; // current page loaded
 var page = null; // page the user is trying to reach
 
-function getCurrPageName() {
-    const queryString = window.location.search; // get current page url
-    const urlParams = new URLSearchParams(queryString);
-    const pageParam = urlParams.get('page'); // get the page param
-    if (pageParam == null || page == ""){
-        return "home";
-    }
-    return pageParam;
-}
-
-function loadHTML(file, callback) {
+function readFile(file, callback) {
     fetch(file)
         .then(response => {
             if (!response.ok) {
@@ -22,6 +12,83 @@ function loadHTML(file, callback) {
         })
         .then(data => callback(data))
         .catch(error => console.error("Error:", error));
+}
+
+function insertStyles(element, path) {
+    const HTMLElement = document.getElementById(element);
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = path;
+    HTMLElement.appendChild(link);
+}
+
+function insertScripts(element, path){
+    const HTMLElement = document.getElementById(element);
+    const script = document.createElement("script");
+    script.src = path;
+    script.async = true;
+    HTMLElement.appendChild(script);
+}
+
+function insertHTML(element, path, callback){
+    const HTMLElement = document.getElementById(element);
+
+    readFile(path, function(newHTML){
+        HTMLElement.innerHTML = newHTML;
+        currPage = page;
+        if (callback) {
+            callback();
+        }
+    });
+}
+
+function parseJSON(data){
+    // if page is already loaded, do nothing
+    if(page == currPage) return;
+
+    // get the page we need
+    if (data.homePage != null) {
+        insertHTML("content", `/pages/${page}/${data.homePage}`, function(){
+            currPage = page; // set new homepage
+            requestAnimationFrame(() => Prism.highlightAll()); // syntax highlight
+
+            // get any scripts we need
+            if (data.scripts != null) {
+                insertScripts("content", `/pages/${page}/src/js/${data.scripts}`);
+            }
+
+            // get any styles we need
+            if (data.styles != null){
+                insertStyles("content", `/pages/${page}/src/css/${data.styles}`);
+            }
+        });
+    }
+
+    // Get correct sidebar
+    if(data.sidebar == null){
+        if(currSidebar != "home"){
+            console.log("loading /pages/home/sidebar.html");
+            insertHTML("sidebar", "/pages/home/sidebar.html");
+            currSidebar = "home";
+        }
+    }
+    else{
+        if(currSidebar != page) {
+            console.log(`loading /pages/${page}/${data.sidebar}`);
+            insertHTML("sidebar", `/pages/${page}/${data.sidebar}`);
+            currSidebar = page;
+        }
+    }
+}
+
+function getCurrPageName() {
+    const queryString = window.location.search; // get current page url
+    const urlParams = new URLSearchParams(queryString);
+    const pageParam = urlParams.get('page'); // get the page param
+    if (pageParam == null || page == ""){
+        return "home";
+    }
+    return pageParam;
 }
 
 function loadJSON(file, callback){
@@ -34,80 +101,6 @@ function loadJSON(file, callback){
         })
         .then(data => callback(data))
         .catch(error => console.error("Error:", error));
-}
-
-function insertStyles(file){
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = `/pages/${page}/src/css/${file}`;
-    document.head.appendChild(link);
-}
-
-function insertScripts(element, file){
-    // Note: wont this keep appending multiple scripts? Should look into that.
-    const HTMLElement = document.getElementById(element);
-    const script = document.createElement("script");
-    script.src = `/pages/${page}/src/js/${file}`;
-    script.async = true;
-    HTMLElement.appendChild(script);
-}
-
-function insertSidebar(element, path){
-    const HTMLElement = document.getElementById(element);
-
-    loadHTML(path, function(newHTML){
-        HTMLElement.innerHTML = newHTML;
-    });
-}
-
-function insertHTML(element, file){
-    const HTMLElement = document.getElementById(element);
-
-    loadHTML(`/pages/${page}/${file}`, function(newHTML){
-        if(currPage != page){
-            HTMLElement.innerHTML = newHTML;
-            currPage = page;
-            requestAnimationFrame(() => Prism.highlightAll()); // ensure prism runs when new content loads
-        }
-    });
-}
-
-function parseJSON(data){
-    // do nothing if the page is already loaded
-    if(page == currPage){
-        return;
-    }
-
-    // Get correct sidebar
-    if(data.sidebar == null){
-        if(currSidebar != "home"){
-            console.log("loading /pages/home/sidebar.html");
-            insertSidebar("sidebar", "/pages/home/sidebar.html");
-            currSidebar = "home";
-        }
-    }
-    else{
-        if(currSidebar != page) {
-            console.log(`loading /pages/${page}/${data.sidebar}`);
-            insertSidebar("sidebar", `/pages/${page}/${data.sidebar}`);
-            currSidebar = page;
-        }
-    }
-
-    // get styles for the page
-    if (data.styles != null) {
-        insertStyles(data.styles);
-    }
-
-    // get the page we need
-    if (data.homePage != null) {
-        insertHTML("content", data.homePage);
-    }
-
-    // get the script we need
-    if (data.scripts != null) {
-        insertScripts("content", data.scripts);
-    }
 }
 
 // listen for page loads
