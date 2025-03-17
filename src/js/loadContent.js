@@ -67,28 +67,16 @@ function parseJSON(data){
     // Get correct sidebar
     if(data.sidebar == null){
         if(currSidebar != "home"){
-            console.log("loading /pages/home/sidebar.html");
             insertHTML("sidebar", "/pages/home/sidebar.html");
             currSidebar = "home";
         }
     }
     else{
         if(currSidebar != page) {
-            console.log(`loading /pages/${page}/${data.sidebar}`);
             insertHTML("sidebar", `/pages/${page}/${data.sidebar}`);
             currSidebar = page;
         }
     }
-}
-
-function getCurrPageName() {
-    const queryString = window.location.search; // get current page url
-    const urlParams = new URLSearchParams(queryString);
-    const pageParam = urlParams.get('page'); // get the page param
-    if (pageParam == null || page == ""){
-        return "home";
-    }
-    return pageParam;
 }
 
 function loadJSON(file, callback){
@@ -101,6 +89,16 @@ function loadJSON(file, callback){
         })
         .then(data => callback(data))
         .catch(error => console.error("Error:", error));
+}
+
+function getCurrPageName() {
+    const queryString = window.location.search; // get current page url
+    const urlParams = new URLSearchParams(queryString);
+    const pageParam = urlParams.get('page'); // get the page param
+    if (pageParam == null || page == ""){
+        return "home";
+    }
+    return pageParam;
 }
 
 // listen for page loads
