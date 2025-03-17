@@ -39,7 +39,7 @@
 
 
 .post>.post-header>.image>img {
-    max-height: 100px;
+    max-width: 125px;
     align-items: flex-start;
     border-radius: 15px;
 }
