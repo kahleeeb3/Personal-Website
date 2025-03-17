@@ -108,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
     page = getCurrPageName();
     // load desired page
     loadJSON(`/pages/${page}/src/json/page.json`, parseJSON);
+    document.title = page.replace(/\b\w/g, char => char.toUpperCase()); // capitalize the first letter
 });
 
 // listen for user hitting back button
