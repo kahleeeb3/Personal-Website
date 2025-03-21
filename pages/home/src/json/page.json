@@ -1,5 +1,6 @@
 {
-    "homePage" : "index.html",
+    "page" : "home",
+    "content"  : ["home.html"],
     "sidebar"  : "sidebar.html",
     "styles"   : "thread.css",
     "scripts"  : "thread.js"

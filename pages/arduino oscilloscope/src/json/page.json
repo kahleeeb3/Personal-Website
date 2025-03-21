@@ -1,5 +1,6 @@
 {
-    "homePage" : "index.html",
+    "page" : "arduino oscilloscope",
+    "content"  : ["index.html"],
     "sidebar"  : null,
     "styles"   : null,
     "scripts"  : null
