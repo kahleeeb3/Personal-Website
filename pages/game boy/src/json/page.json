@@ -1,6 +1,6 @@
 {
     "page" : "game boy",
-    "content"  : ["setup.html", "page2.html"],
+    "content"  : ["setup.html", "memory.html"],
     "sidebar"  : "sidebar.html",
     "styles"   : null,
     "scripts"  : null
