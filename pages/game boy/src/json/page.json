@@ -1,6 +1,7 @@
 {
-    "homePage" : "Development Environment.html",
-    "sidebar"  : "Alternate Sidebar.html",
+    "page" : "game boy",
+    "content"  : ["development environment.html", "page2.html"],
+    "sidebar"  : "sidebar.html",
     "styles"   : null,
     "scripts"  : null
 }

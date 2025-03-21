@@ -1,5 +1,6 @@
 {
-    "homePage" : "projects.html",
+    "page" : "projects",
+    "content"  : ["projects.html"],
     "sidebar"  : null,
     "styles"   : null,
     "scripts"  : null

@@ -1,5 +1,6 @@
 {
-    "homePage" : "about.html",
+    "page" : "about",
+    "content"  : ["about.html"],
     "sidebar"  : null,
     "styles"   : null,
     "scripts"  : null
