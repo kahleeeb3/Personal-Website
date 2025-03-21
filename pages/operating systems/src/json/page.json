@@ -1,0 +1,7 @@
+{
+    "page" : "operating systems",
+    "content"  : ["file systems.html"],
+    "sidebar"  : "sidebar.html",
+    "styles"   : null,
+    "scripts"  : null
+}
