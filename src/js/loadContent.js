@@ -70,12 +70,14 @@ function parseJSON(data){
         if(currSidebar != "home"){
             insertHTML("sidebar", "/pages/home/sidebar.html");
             currSidebar = "home";
+            // console.log("Loading default sidebar");
         }
     }
     else{
         if(currSidebar != page) {
             insertHTML("sidebar", `/pages/${page}/${data.sidebar}`);
             currSidebar = page;
+            // console.log(`Loading ${page} Sidebar`);
         }
     }
 }
