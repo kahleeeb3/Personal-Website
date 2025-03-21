@@ -54,21 +54,30 @@ function insertScripts(element, path){
 
 function parseJSON(data){
 
+    const debugMode = false;
+    debugMode ? console.log("page load debug: on"): null;
+    
     // get the page we need
-    if(data.page != null){
+    const desiredPage = `${data.page}/${data.content}`;
+
+    // ensure the page has not already been loaded
+    if(data.page != null && desiredPage!=currPage){
         insertHTML("content", `/pages/${data.page}/${data.content}`, function(){
-            currPage = data.page; // set the new page
+            currPage = desiredPage; // set the new page
             requestAnimationFrame(() => Prism.highlightAll()); // allow syntax highlight
             createCollapsible(); // allow collapsible
+            debugMode ? console.log(`loaded /pages/${data.page}/${data.content}`): null;
 
             // get any scripts we need
             if (data.scripts != null) {
                 insertScripts("content", `/pages/${data.page}/src/js/${data.scripts}`);
+                debugMode ? console.log(`loaded /pages/${data.page}/src/js/${data.scripts}`): null;
             }
 
             // get any styles we need
             if (data.styles != null){
                 insertStyles("content", `/pages/${data.page}/src/css/${data.styles}`);
+                debugMode ? console.log(`loaded /pages/${data.page}/src/css/${data.styles}`): null;
             }
 
         });
@@ -79,14 +88,14 @@ function parseJSON(data){
         if(currSidebar != "home"){
             insertHTML("sidebar", "/pages/home/sidebar.html");
             currSidebar = "home";
-            // console.log("Loading default sidebar");
+            debugMode ? console.log(`loaded /pages/home/sidebar.html`): null;
         }
     }
     else{
         if(currSidebar != data.page) {
             insertHTML("sidebar", `/pages/${data.page}/${data.sidebar}`);
             currSidebar = data.page;
-            // console.log(`Loading ${page} Sidebar`);
+            debugMode ? console.log(`loaded /pages/${data.page}/${data.sidebar}`): null;
         }
     }
 }
