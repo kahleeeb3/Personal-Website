@@ -1,0 +1,166 @@
+<style>
+    .sideNavButton.page2 {
+        background-color: rgb(190, 190, 190);
+        color: black;
+    }
+</style>
+
+<h2>May 8, 2023</h2>
+<h1>Memory Overview</h1>
+
+<p>
+    On the GBA, specific areas of memory are mapped directly to hardware functions. To get the GBA to do anything, you
+    need to write data to specific sections of memory. This is known as <b>memory-mapped IO</b>. Luckily the
+    hardware
+    is well documented in the <a href="https://www.coranac.com/tonc/text/toc.htm">Tonc Text</a> and the <a
+        href="http://www.cs.rit.edu/~tjh8300/CowBite/CowBiteSpec.htm">CowBite Spec</a>.
+</p>
+
+<p>
+    <b>Disclaimer:</b> Hardware
+    documentation for this blog post are mostly summarized from theses sources. You really should read those for a full
+    understanding. However, I know you're here because you don't want to do that. So, I will summarize the content you
+    need to know for rest of this blog post. This is where the fun begins...
+</p>
+
+<p>
+    Below is a table of the important sections of memory. We will mostly be focused on the ones highlighted since they
+    control video output. I'm placing this in a separate section since you will likely need to reference it often.
+</p>
+
+<table border="1" cellspacing="0" cellpadding="2">
+    <colgroup>
+        <col span="8" valign="top">
+    </colgroup>
+    <tbody>
+        <tr>
+            <th>Area</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Length</th>
+            <th>Port-Size</th>
+            <th>description</th>
+        </tr>
+        <tr>
+            <th>System ROM </th>
+            <td><code>0x00000000</code> </td>
+            <td><code>0x00003FFF</code>
+            </td>
+            <td>16KB </td>
+            <td>32 bit
+            </td>
+            <td>BIOS memory. You can execute it, but not read it (i.o.w, touch,
+                don't look).
+            </td>
+        </tr>
+        <tr>
+            <th>EWRAM </th>
+            <td><code>0x02000000</code> </td>
+            <td><code>0x0203FFFF</code>
+            </td>
+            <td>256KB </td>
+            <td>16 bit
+            </td>
+            <td>External work RAM. Is available for your code and data. If
+                you're using a multiboot cable, this is where the downloaded code
+                goes and execution starts (normally execution starts at ROM).
+                Due to the 16bit port, you want this section's code to be THUMB
+                code.
+            </td>
+        </tr>
+        <tr>
+            <th>IWRAM </th>
+            <td><code>0x03000000</code> </td>
+            <td><code>0x03007FFF</code>
+            </td>
+            <td>32KB </td>
+            <td>32 bit
+            </td>
+            <td>This is also available for code and data. The 32-bit bus
+                and the fact that it's embedded in the CPU make this the fastest
+                memory section. The 32bit bus means that ARM instructions can
+                be loaded at once, so put your ARM code here.
+            </td>
+        </tr>
+        <tr style="background-color: #646464;">
+            <th>IO RAM </th>
+            <td><code>0x04000000</code> </td>
+            <td><code>0x040003FF</code>
+            </td>
+            <td>1KB </td>
+            <td>16 bit
+            </td>
+            <td>Memory-mapped IO registers. These have nothing to do with the
+                CPU registers you use in assembly so the name can be a bit
+                confusing. Don't blame me for that. This section is where you
+                control graphics, sound, buttons and other features.
+            </td>
+        </tr>
+        <tr style="background-color: #646464;">
+            <th>PAL RAM </th>
+            <td><code>0x05000000</code> </td>
+            <td><code>0x050003FF</code>
+            </td>
+            <td>1KB </td>
+            <td>16 bit
+            </td>
+            <td>Memory for two palettes containing 256 entries of 15-bit colors
+                each. The first is for backgrounds, the second for sprites.
+            </td>
+        </tr>
+        <tr style="background-color: #646464;">
+            <th>VRAM </th>
+            <td><code>0x06000000</code> </td>
+            <td><code>0x06017FFF</code>
+            </td>
+            <td>96KB </td>
+            <td>16 bit
+            </td>
+            <td>Video RAM. This is where the data used for backgrounds and
+                sprites are stored. The interpretation of this data depends
+                on a number of things, including video mode and background and
+                sprite settings.
+            </td>
+        </tr>
+        <tr style="background-color: #646464;">
+            <th>OAM </th>
+            <td><code>0x07000000</code> </td>
+            <td><code>0x070003FF</code>
+            </td>
+            <td>1KB </td>
+            <td>32 bit
+            </td>
+            <td>Object Attribute Memory. This is where you control the
+                sprites.
+            </td>
+        </tr>
+        <tr>
+            <th>PAK ROM</th>
+            <td><code>0x08000000</code> </td>
+            <td>var
+            </td>
+            <td>var </td>
+            <td>16 bit
+            </td>
+            <td>Game Pak ROM. This is where the game is located and execution
+                starts, except when you're running from a multiboot cable.
+                The size is variable, but the limit is 32MB. It's a 16bit bus,
+                so THUMB code is preferable over ARM code here.
+            </td>
+        </tr>
+        <tr>
+            <th>Cart RAM </th>
+            <td><code>0x0E000000</code> </td>
+            <td>var
+            </td>
+            <td>var </td>
+            <td>8 bit
+            </td>
+            <td>This is where saved data is stored. Cart RAM can be in the
+                form of SRAM, Flash ROM or EEPROM. Programmatically they all
+                do the same thing: store data. The total size is variable,
+                but 64KB is a good indication.
+            </td>
+        </tr>
+    </tbody>
+</table>

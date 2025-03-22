@@ -1,29 +1,55 @@
-// Open Sidebar
-function openNav() {
+function closeSidebar(){
+    const sidebar = document.getElementById("sidebar");
+    const content = document.getElementById("content");
+    const button = document.getElementById("openSidebarButton");
 
-    if (window.screen.width >= 700) {
-        document.getElementById("mySidebar").style.width = "250px";
-        
-    } else {
-        document.getElementById("mySidebar").style.width = window.screen.width;
+    button.style.backgroundColor = ""; 
+    content.style.marginLeft = "0px";
+    sidebar.style.display = "none";
+
+    sidebar.classList.remove("expanded");
+}
+
+function openSidebar(){
+    const sidebar = document.getElementById("sidebar");
+    const content = document.getElementById("content");
+    const button = document.getElementById("openSidebarButton");
+    
+    button.style.backgroundColor = "rgb(15, 15, 15)"; 
+
+    if (window.innerWidth > 990) {
+        content.style.marginLeft = "250px";
     }
+    sidebar.style.display = "block";
 
-    document.getElementById("main").style.marginLeft = "250px";
-    document.getElementById("sidebarbtn").innerHTML = "";
+    sidebar.classList.add("expanded");
 }
 
-// Close Sidebar
-function closeNav() {
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("main").style.marginLeft = "0";
-    var elem = document.getElementById("sidebarbtn");
-    elem.innerHTML =
-        '<button class="openbtn" onclick="openNav()">&#9776</button>';
+function toggleSidebar(){
+    const sidebar = document.getElementById("sidebar");
+
+    if(sidebar.classList.contains("expanded")){
+        closeSidebar();
+    }
+    else{
+        openSidebar();
+    }
 }
 
-// Set the sidebar to initially be open if window is big enough
-if (window.screen.width >= 700) {
-    openNav();
-} else {
-    closeNav();
-}
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.innerWidth < 990) {
+        closeSidebar();
+    }
+    else{
+        openSidebar();
+    }
+});
+
+window.addEventListener("resize", () => {
+    if (window.innerWidth < 990) {
+        closeSidebar();
+    }
+    else {
+        openSidebar();
+    }
+});

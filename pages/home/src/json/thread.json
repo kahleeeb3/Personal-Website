@@ -1,0 +1,25 @@
+{
+    "posts" : [
+        {
+            "title" : "Game Boy - Setup",
+            "date"  : "May 7, 2023",
+            "image" : "/pages/game%20boy/files/wsl-statusbar-indicator.png",
+            "description": "Provide setup instructions for programming a Game Boy Advanced SP using the C programming language.",
+            "link" : "/?page=game boy&subpage=1"
+        },
+        {
+            "title" : "A Simple File System",
+            "date"  : "April 22, 2023",
+            "image" : "/pages/operating%20systems/files/extent_access.png",
+            "description": "Example of creating a simple file system using the C programming language. The file system will allow users to list directory entries, rename files, copy files, delete files, as well as read/write/open/close files.",
+            "link": "/?page=operating systems"
+        },
+        {
+            "title" : "Arduino Uno Oscilloscope",
+            "date"  : "November 1, 2021",
+            "image" : "/pages/arduino%20oscilloscope/files/setup(1).jpg",
+            "description": "Overview of how to turn an arduino uno into a basic oscilloscope using operational amplifier circuits.",
+            "link": "/?page=arduino oscilloscope"
+        }
+    ]
+}

@@ -1,26 +1,15 @@
-# Prism ([download](https://prismjs.com/index.html))
-## Configuration:
-- Core: Tomorrow Night
-- Languages: Select All
-- Plugins: Normalize Whitespace, Unescaped Markup, Copy to Clipboard Button, Toolbar
+- Single-Page Application (SPA)
 
-```html
-<script type="text/plain" class="language-c">
-    #include <stdio.h>
-    #include <unistd.h>
-</script>
-```
-
-# To Do
-- add collapse menus option to pages.
-- fix image sizes on mobile
-```js
-if(mobile){
-    image-width: "100%"
-}
-```
-- add a latex code cell
+# Plugins
+1. Prism.js
 
 ```
 python3 -m http.server
 ```
+
+# To Do:
+- still pushing history if already on page
+- Add version to scripts so the scripts are forced to reload every time.
+- Probably need to make the sidebar scrollable for subpage navigation.
+- clicking images opens a larger view
+- error checking for pages that don't exits
