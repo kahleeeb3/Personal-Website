@@ -1,23 +1,25 @@
 /*
-    1. User navigates to /?page=<pageName>
-    2. User clicks a link to /?page=<pageName>
+User is going to navigate ?page=<pageName>
+
+- if no page provided:
+    - load: pages/home/home.html
+- else:
+    - load: pages/<pageName>/<pageName>
+    - if pages/<pageName>/sidebar.html exists:
+        - load: pages/<pageName>/sidebar.html
 */
 
-var currSidebar = null; // current sidebar displayed
-var currPage = null; // current page loaded
-var page = null; // page the user is trying to reach
+var currSidebar = null; // store which sidebar is currently showing
+var currPage = null; // store which page is currently displayed
 
 function getCurrPageName() {
     const queryString = window.location.search; // get current page url
     const urlParams = new URLSearchParams(queryString);
     const page = urlParams.get('page'); // get the page param
-    if (page == null || page == ""){
-        return "home"
-    }
     return page
 }
 
-function loadHTML(file, callback) {
+function readTextFile(file, callback) {
     fetch(file)
         .then(response => {
             if (!response.ok) {
@@ -25,65 +27,83 @@ function loadHTML(file, callback) {
             }
             return response.text();
         })
-        .then(data => callback(data))
+        .then(text => callback(text))
         .catch(error => console.error("Error:", error));
 }
 
-function loadJSON(file, callback){
-    fetch(file)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to load ${file}`);
-            }
-            return response.json();
-        })
-        .then(data => callback(data))
-        .catch(error => console.error("Error:", error));
-}
-
-function insertStyles(file){
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = `/pages/${page}/src/css/${file}`;
-    document.head.appendChild(link);
-}
-
-function insertScripts(element, file){
-    const HTMLElement = document.getElementById(element);
-    const script = document.createElement("script");
-    script.src = `/pages/${page}/src/js/${file}`;
-    script.async = true;
-    HTMLElement.appendChild(script);
-}
-
-function insertHTML(element, file){
+function replaceHTML(element, file) {
+    // replaces elements inner HTML with text from a file
     const HTMLElement = document.getElementById(element);
 
-    loadHTML(`/pages/${page}/${file}`, function(newHTML){
-        if(currPage != page){
-            HTMLElement.innerHTML = newHTML;
-            currPage = page;
-            history.pushState({ page: page }, "", `/?page=${page}`);
-        }
+    readTextFile(file, function(content) {
+        HTMLElement.innerHTML = content;
     });
 }
 
-function parseJSON(data){
-    if (data.homePage != null) {
-        insertHTML("content", data.homePage);
+function getPage(page, pushState=true) {
+    // if no page was passed, set page to home
+    if (page == null || page.trim() == '') {
+        page = "home";
     }
-    if (data.scripts != null) {
-        insertScripts("content", data.scripts);
+
+    // if the desired page is not the current one
+    if(currPage != page){
+        replaceHTML("content", `pages/${page}/${page}.html`);
+        document.title = page.replace(/\b\w/g, char => char.toUpperCase()); // capitalize the first letter
+        currPage = page;
+        if(pushState){
+            history.pushState({ page: page }, "", `/?page=${page}`);
+        }
     }
-    if (data.styles != null) {
-        insertStyles(data.styles);
+
+    // if the current sidebar is not the desired one
+    if (currSidebar != page){
+        const HTMLElement = document.getElementById("sidebar");
+        readTextFile(`pages/${page}/sidebar.html`, function(content) {
+            // Note: user can keep sidebar.html empty to remove file DNE errors
+            if (content != "") {
+                HTMLElement.innerHTML = content;
+                currSidebar = page;
+            }
+
+            // edge case where this is the first page loaded
+            if (content == "" && currSidebar == null){
+                replaceHTML("sidebar","pages/home/sidebar.html");
+                currSidebar = "home";
+            }
+
+        });
     }
-    // if (data.sidebar != null) {
-    //     console.log("updating sidebar");
-    // }    
 }
 
+
+function handleInternalLink(href) {
+    // handles links to internal web pages
+    const url = new URL(href); // get url
+    const page = url.searchParams.get('page'); // get page name
+    getPage(page);
+}
+
+function handlePopState(event) {
+    // Handle the state when the user presses the back/forward button
+    const page = event.state ? event.state.page : "home"; // Default to "home" if no state exists
+    getPage(page, false);
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
-    page = getCurrPageName();
-    loadJSON(`/pages/${page}/src/json/page.json`, parseJSON);
+    getPage(getCurrPageName());
+
+     
+    // listen for internal links
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('internal-link') && event.target.hasAttribute('href')) {
+            event.preventDefault();
+            handleInternalLink(event.target.href);
+        }
+    });
+
+    // Listen for changes in the history (back/forward buttons)
+    window.addEventListener('popstate', handlePopState);
+    
 });
