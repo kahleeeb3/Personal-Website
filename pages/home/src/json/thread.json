@@ -1,11 +1,11 @@
 {
     "posts" : [
         {
-            "title" : "Test Page",
+            "title" : "Web Development",
             "date"  : "March 12, 2025",
             "image" : "https://images.stockcake.com/public/e/e/9/ee9affe4-120f-4e24-bbfc-c890117a4c74_medium/cheerful-yellow-character-stockcake.jpg",
-            "description": "Just a page for testing new web features",
-            "link" : "/?page=test"
+            "description": "Place some description here.",
+            "link" : "/?page=web development"
         },
         {
             "title" : "Arduino Uno Oscilloscope",
