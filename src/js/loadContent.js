@@ -50,8 +50,7 @@ function parseJSON(data){
     if (data.homePage != null) {
         insertHTML("content", `/pages/${page}/${data.homePage}`, function(){
             currPage = page; // set new homepage
-            requestAnimationFrame(() => Prism.highlightAll()); // allow syntax highlight
-            createCollapsible(); // allow collapsible
+            requestAnimationFrame(() => Prism.highlightAll()); // syntax highlight
 
             // get any scripts we need
             if (data.scripts != null) {
