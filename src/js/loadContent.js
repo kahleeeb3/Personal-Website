@@ -10,7 +10,6 @@ User is going to navigate ?page=<pageName>
 */
 
 var currSidebar = "None"; // store which sidebar is currently showing
-var currPage = "None"; // store which page is currently displayed
 
 function getCurrPageName() {
     const queryString = window.location.search; // get current page url
@@ -40,20 +39,13 @@ function replaceHTML(element, file) {
     });
 }
 
-function getPage(page, pushState=true) {
+function getPage(page) {
     // if no page was passed, set page to home
     if (page == null || page.trim() == '') {
         page = "home";
     }
 
     replaceHTML("content", `pages/${page}/${page}.html`);
-    document.title = page.replace(/\b\w/g, char => char.toUpperCase()); // capitalize the first letter
-    if(currPage != page){
-        currPage = page;
-        if(pushState){
-            history.pushState({ page: page }, "", `/?page=${page}`);
-        }
-    }
 
     // replace sidebar if pages/<pageName>/sidebar.html exists:
     if (currSidebar != page){
@@ -65,7 +57,9 @@ function getPage(page, pushState=true) {
                 currSidebar = page;
             }
         });
+
     }
+    // history.pushState({ page: page }, "", `/?page=${page}`);
 }
 
 
@@ -76,12 +70,13 @@ function handleInternalLink(href) {
     getPage(page);
 }
 
+/*
 function handlePopState(event) {
     // Handle the state when the user presses the back/forward button
     const page = event.state ? event.state.page : "home"; // Default to "home" if no state exists
-    getPage(page, false);
+    replaceHTML("content", `${page}.html`);
 }
-
+*/
 
 document.addEventListener("DOMContentLoaded", function () {
     getPage(getCurrPageName());
@@ -96,6 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Listen for changes in the history (back/forward buttons)
-    window.addEventListener('popstate', handlePopState);
+    // window.addEventListener('popstate', handlePopState);
     
 });
