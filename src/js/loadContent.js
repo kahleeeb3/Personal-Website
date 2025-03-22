@@ -52,50 +52,21 @@ function insertScripts(element, file){
 }
 
 function insertSidebar(element, file){
+    const HTMLElement = document.getElementById(element);
 
-    // what about if the homebar is already loaded and we visit home?
-
-    // does page have a dedicated sidebar
-    if(file != null){
-        // is that sidebar already loaded?
-        if(currSidebar == page){
-            // do nothing
-            console.log("This page has a dedicated sidebar but its already been loaded");
-        }
-        else{
-            // load that pages sidebar
-            console.log("This page has a dedicated sidebar but it hasn't been loaded yet");
-            const HTMLElement = document.getElementById(element);
-            const path = `/pages/${page}/${file}`;
-
-            loadHTML(path, function(newHTML){
-                if(currSidebar != page){
-                    HTMLElement.innerHTML = newHTML;
-                    currSidebar = page;
-                }
-            });
-        }
+    // set default sidebar to be home
+    var path = `/pages/${page}/${file}`;
+    if(file == null){
+        path = "/pages/home/sidebar.html"
     }
-    else{
-        // is the home sidebar already loaded?
-        if(currSidebar == "home"){
-            // do nothing
-            console.log("This page does not have a dedicated sidebar but the home sidebar is already loaded");
-        }
-        else{
-            // load the home page sidebar
-            console.log("This page does not have a dedicated sidebar and the home sidebar is not already loaded");
-            const HTMLElement = document.getElementById(element);
-            const path = "/pages/home/sidebar.html";
 
-            loadHTML(path, function(newHTML){
-                if(currSidebar != page){
-                    HTMLElement.innerHTML = newHTML;
-                    currSidebar = page;
-                }
-            });
+    // insert sidebar
+    loadHTML(path, function(newHTML){
+        if(currSidebar != page){
+            HTMLElement.innerHTML = newHTML;
+            currSidebar = page;
         }
-    }
+    });
 }
 
 function insertHTML(element, file){
@@ -112,9 +83,11 @@ function insertHTML(element, file){
 }
 
 function parseJSON(data){
-    insertSidebar("sidebar", data.sidebar);
     if (data.styles != null) {
         insertStyles(data.styles);
+    } 
+    if (data.sidebar != null) {
+        insertSidebar("sidebar", data.sidebar);
     }
     if (data.homePage != null) {
         insertHTML("content", data.homePage);
