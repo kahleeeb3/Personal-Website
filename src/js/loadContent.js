@@ -54,30 +54,21 @@ function insertScripts(element, path){
 
 function parseJSON(data){
 
-    const debugMode = false;
-    debugMode ? console.log("page load debug: on"): null;
-    
     // get the page we need
-    const desiredPage = `${data.page}/${data.content}`;
-
-    // ensure the page has not already been loaded
-    if(data.page != null && desiredPage!=currPage){
+    if(data.page != null){
         insertHTML("content", `/pages/${data.page}/${data.content}`, function(){
-            currPage = desiredPage; // set the new page
+            currPage = data.page; // set the new page
             requestAnimationFrame(() => Prism.highlightAll()); // allow syntax highlight
             createCollapsible(); // allow collapsible
-            debugMode ? console.log(`loaded /pages/${data.page}/${data.content}`): null;
 
             // get any scripts we need
             if (data.scripts != null) {
                 insertScripts("content", `/pages/${data.page}/src/js/${data.scripts}`);
-                debugMode ? console.log(`loaded /pages/${data.page}/src/js/${data.scripts}`): null;
             }
 
             // get any styles we need
             if (data.styles != null){
                 insertStyles("content", `/pages/${data.page}/src/css/${data.styles}`);
-                debugMode ? console.log(`loaded /pages/${data.page}/src/css/${data.styles}`): null;
             }
 
         });
@@ -88,14 +79,14 @@ function parseJSON(data){
         if(currSidebar != "home"){
             insertHTML("sidebar", "/pages/home/sidebar.html");
             currSidebar = "home";
-            debugMode ? console.log(`loaded /pages/home/sidebar.html`): null;
+            // console.log("Loading default sidebar");
         }
     }
     else{
         if(currSidebar != data.page) {
             insertHTML("sidebar", `/pages/${data.page}/${data.sidebar}`);
             currSidebar = data.page;
-            debugMode ? console.log(`loaded /pages/${data.page}/${data.sidebar}`): null;
+            // console.log(`Loading ${page} Sidebar`);
         }
     }
 }
