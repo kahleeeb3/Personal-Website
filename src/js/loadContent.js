@@ -106,20 +106,16 @@ function getDesiredPage(urlParams){
     const pageParam = urlParams.get('page') ?? "home";
     const subPageParam = urlParams.get('subpage');
 
-    // store new page title
-    var newTitle = pageParam.replace(/\b\w/g, char => char.toUpperCase());
-
     // load desired content
     loadJSON(`/pages/${pageParam}/src/json/page.json`, function(data){
         if(data.content[subPageParam-1] != null) {
             data.content = data.content[subPageParam-1];
-            newTitle += " - "+data.content.slice(0, -5).replace(/\b\w/g, char => char.toUpperCase());
         }
         else{
             data.content = data.content[0];
         }
         parseJSON(data);
-        document.title = newTitle;
+        document.title = pageParam.replace(/\b\w/g, char => char.toUpperCase());
     });
 
 }
