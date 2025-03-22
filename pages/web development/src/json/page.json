@@ -1,6 +1,6 @@
 {
     "homePage" : "index.html",
-    "sidebar"  : "deleteThisLater.html",
+    "sidebar"  : null,
     "styles"   : null,
     "scripts"  : null
 }
