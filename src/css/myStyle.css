@@ -42,7 +42,6 @@ body > .sidebar {
     background-color: #111;
     color: white;
     height: 100vh;
-    padding: 0px 16px 0px 16px; /*top right bottom left*/
 }
 
 body > .sidebar > .closeButton {
@@ -50,6 +49,6 @@ body > .sidebar > .closeButton {
     color: white;
     border: none;
     font-size: 36px;
-    padding: 0% 0% 0% 85%;
+    margin-left: 70%;
 }
 

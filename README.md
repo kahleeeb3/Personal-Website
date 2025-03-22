@@ -1,5 +1,3 @@
-- website is a Single-Page Application (SPA)
-
 # Prism ([download](https://prismjs.com/index.html))
 ## Configuration:
 - Core: Tomorrow Night
