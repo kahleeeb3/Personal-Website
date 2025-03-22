@@ -1,0 +1,852 @@
+<h3>May 7, 2023</h3>
+<h1>Game Boy Development</h1>
+<p>
+  The goal of this project is to develop programs for the Nintendo Game Boy Advance using the C programming language.
+  The Game Boy Advance (GBA) comes in several different variations with similar hardware. Being released in 2003, the
+  Game Boy Advance SP was my first childhood handheld console. The GBA also has the benefit of being a very well
+  documented console so research on its hardware and development libraries such as "Tonc" are very accessible to the
+  average person.
+</p>
+
+<!-- <button class="collapsible active">Setup &#9207;</button> -->
+<button class="collapsible">Development Environment &#9205;</button>
+<div class="collapsible-content">
+  <p>
+    We will begin our development by first explaining how the development environment is setup. Because useful tools
+    such as "make" are not conveniently available in Windows, we will be using a linux distribution for our development.
+    I have chosen to use <b>Windows Subsystem for Linux (WSL)</b>. WSL is a feature of Windows that allows developers to
+    run a Linux environment without the need for a separate virtual machine or dual booting. Additionally, we will need
+    a compiler that can turn C code into a GBA binary. For this I have chosen to use <b>devkitPro</b>, which is based on
+    the GNU compiler collection (GCC). We will also need a program capable of running our compiled binaries for testing
+    purposes. There are many options available for this, but I have chosen to go with <b>mGBA</b>. If you would like to
+    run your compiled code on actual hardware, I suggest purchasing a <a href="https://a.co/d/22hul8W">EZ-FLASH
+      OMEGA</a> from a source such as Amazon. Additionally, a useful programming library that you can use is <b>Tonc
+      v1.4.2</b>. This library comes with very useful documentation that can be found <a
+      href="https://www.coranac.com/tonc/text/toc.htm">here</a>.
+  </p>
+
+  <p>
+    We will begin our setup by <a href="https://learn.microsoft.com/en-us/windows/wsl/install">installing WSL</a>. This
+    is a very simple process and only requires you to open Windows Command Prompt in administrator mode and enter the
+    following command:
+  </p>
+
+  <script type="text/plain" class="language-markup">
+      wsl --install
+    </script>
+
+  <p>
+    The distro will default to Ubuntu. Now that WSL is installed we can launch it using this command:
+  </p>
+
+  <script type="text/plain" class="language-markup">
+      wsl
+    </script>
+
+  <p>
+    We now need to setup a workspace directory. I created the following folder in WSL:
+  </p>
+
+  <script type="text/plain" class="language-markup">
+      cd ~; mkdir Desktop; cd Desktop
+    </script>
+
+  <p>
+    To make things simple you may clone the entire repo to this directory:
+  </p>
+
+  <script type="text/plain" class="language-markup">
+      git clone https://github.com/kahleeeb3/Gameboy.git
+    </script>
+
+  <p>
+    Now we will need to install devkitPro as mentioned earlier.
+  </p>
+
+  <script type="text/plain" class="language-markup">
+      wget https://apt.devkitpro.org/install-devkitpro-pacman
+      chmod +x ./install-devkitpro-pacman
+      sudo ./install-devkitpro-pacman
+    </script>
+
+  <p>
+    You may need to make a symlink for /etc/mtab. See <a
+      href="https://github.com/Microsoft/WSL/issues/150">https://github.com/Microsoft/WSL/issues/150</a>. I did not need
+    to do this.
+  </p>
+
+  <script type="text/plain" class="language-markup">
+      sudo ln -s /proc/self/mounts /etc/mtab
+    </script>
+
+  <p>
+    devkitPro provides libraries for many systems, however, we are only interested in the one used for GBA development.
+    To install this we will run the following (Install All):
+  </p>
+
+  <script type="text/plain" class="language-markup">
+        sudo dkp-pacman -S gba-dev
+    </script>
+
+  <p>
+    Now we will need to define some environment variables so that we can reference devkitPro by name in our makefile. To
+    do so run the following commands:
+  </p>
+
+  <script type="text/plain" class="language-markup">
+      export DEVKITPRO=/opt/devkitpro
+      export DEVKITARM=/opt/devkitpro/devkitARM
+      export DEVKITPPC=/opt/devkitpro/devkitPPC
+    </script>
+
+  <p>
+    Now open VSCode in Windows. In the bottom left corner, select the green button. Then select "Connect to WSL" and
+    <i>File > Open</i> the instillation folder.
+  </p>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/wsl-statusbar-indicator.png" id="figure" style="width: 30%;" />
+  </div>
+
+  <p>
+    Now open a terminal in VSCode and ensure you can build the project.
+  </p>
+
+  <script type="text/plain" class="language-markup">
+      make clean
+      make
+    </script>
+
+  <p>
+    If you want to make your own project, simply create a new folder on the desktop and copy the <span
+      style="color: white; background-color: black;">Makefile</span> I have created. You will also need to create a
+    <span style="color: white; background-color: black;">source</span> and <span
+      style="color: white; background-color: black;">include</span> folder. The source folder must contain a <span
+      style="color: white; background-color: black;">main.c</span> file with a <span
+      style="color: white; background-color: black;">int main(){}</span> function.
+  </p>
+
+  <script type="text/plain" class="language-markup">
+      └── Desktop/
+          └── Your Folder Name/
+              ├── source/
+              │   └── main.c
+              ├── include
+              └── Makefile
+    </script>
+</div>
+
+<button class="collapsible">Memory Registers &#9205;</button>
+<div class="collapsible-content">
+
+  <p>
+    On the GBA, specific areas of memory are mapped directly to hardware functions. To get the GBA to do anything, you
+    need to write specific bits to specific sections of memory. This is known as <b>memory-mapped IO</b>. This means if
+    we want to create some sprites we need to understand the register layout of the system memory. Luckily the hardware
+    is well documented in the <a href="https://www.coranac.com/tonc/text/toc.htm">Tonc Text</a> and the <a
+      href="http://www.cs.rit.edu/~tjh8300/CowBite/CowBiteSpec.htm">CowBite Spec</a>. <b>Disclaimer:</b> Hardware
+    documentation for this blog post are mostly summarized from theses sources. You really should read those for a full
+    understanding. However, I know you're here because you don't want to do that. So, I will summarize the content you
+    need to know for rest of this blog post. This is where the fun begins...
+  </p>
+
+  <p>
+    Below is a table of the important sections of memory. We will mostly be focused on the ones highlighted since they
+    control video output.
+  </p>
+
+  <table border="1" cellspacing="0" cellpadding="2">
+    <colgroup>
+      <col span="8" valign="top">
+    </colgroup>
+    <tbody>
+      <tr>
+        <th>area </th>
+        <th>start </th>
+        <th>end </th>
+        <th>length </th>
+        <th>port-size </th>
+        <th>description
+        </th>
+      </tr>
+      <tr>
+        <th>System ROM </th>
+        <td><code>0000:0000h</code> </td>
+        <td><code>0000:3FFFh</code>
+        </td>
+        <td>16KB </td>
+        <td>32 bit
+        </td>
+        <td>BIOS memory. You can execute it, but not read it (i.o.w, touch,
+          don't look).
+        </td>
+      </tr>
+      <tr>
+        <th>EWRAM </th>
+        <td><code>0200:0000h</code> </td>
+        <td><code>0203:FFFFh</code>
+        </td>
+        <td>256KB </td>
+        <td>16 bit
+        </td>
+        <td>External work RAM. Is available for your code and data. If
+          you're using a multiboot cable, this is where the downloaded code
+          goes and execution starts (normally execution starts at ROM).
+          Due to the 16bit port, you want this section's code to be THUMB
+          code.
+        </td>
+      </tr>
+      <tr>
+        <th>IWRAM </th>
+        <td><code>0300:0000h</code> </td>
+        <td><code>0300:7FFFh</code>
+        </td>
+        <td>32KB </td>
+        <td>32 bit
+        </td>
+        <td>This is also available for code and data. The 32-bit bus
+          and the fact that it's embedded in the CPU make this the fastest
+          memory section. The 32bit bus means that ARM instructions can
+          be loaded at once, so put your ARM code here.
+        </td>
+      </tr>
+      <tr style="background-color: #646464;">
+        <th>IO RAM </th>
+        <td><code>0400:0000h</code> </td>
+        <td><code>0400:03FFh</code>
+        </td>
+        <td>1KB </td>
+        <td>16 bit
+        </td>
+        <td>Memory-mapped IO registers. These have nothing to do with the
+          CPU registers you use in assembly so the name can be a bit
+          confusing. Don't blame me for that. This section is where you
+          control graphics, sound, buttons and other features.
+        </td>
+      </tr>
+      <tr style="background-color: #646464;">
+        <th>PAL RAM </th>
+        <td><code>0500:0000h</code> </td>
+        <td><code>0500:03FFh</code>
+        </td>
+        <td>1KB </td>
+        <td>16 bit
+        </td>
+        <td>Memory for two palettes containing 256 entries of 15-bit colors
+          each. The first is for backgrounds, the second for sprites.
+        </td>
+      </tr>
+      <tr style="background-color: #646464;">
+        <th>VRAM </th>
+        <td><code>0600:0000h</code> </td>
+        <td><code>0601:7FFFh</code>
+        </td>
+        <td>96KB </td>
+        <td>16 bit
+        </td>
+        <td>Video RAM. This is where the data used for backgrounds and
+          sprites are stored. The interpretation of this data depends
+          on a number of things, including video mode and background and
+          sprite settings.
+        </td>
+      </tr>
+      <tr style="background-color: #646464;">
+        <th>OAM </th>
+        <td><code>0700:0000h</code> </td>
+        <td><code>0700:03FFh</code>
+        </td>
+        <td>1KB </td>
+        <td>32 bit
+        </td>
+        <td>Object Attribute Memory. This is where you control the
+          sprites.
+        </td>
+      </tr>
+      <tr>
+        <th>PAK ROM</th>
+        <td><code>0800:0000h</code> </td>
+        <td>var
+        </td>
+        <td>var </td>
+        <td>16 bit
+        </td>
+        <td>Game Pak ROM. This is where the game is located and execution
+          starts, except when you're running from a multiboot cable.
+          The size is variable, but the limit is 32MB. It's a 16bit bus,
+          so THUMB code is preferable over ARM code here.
+        </td>
+      </tr>
+      <tr>
+        <th>Cart RAM </th>
+        <td><code>0E00:0000h</code> </td>
+        <td>var
+        </td>
+        <td>var </td>
+        <td>8 bit
+        </td>
+        <td>This is where saved data is stored. Cart RAM can be in the
+          form of SRAM, Flash ROM or EEPROM. Programmatically they all
+          do the same thing: store data. The total size is variable,
+          but 64KB is a good indication.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<button class="collapsible">Sprite Structure &#9205;</button>
+<div class="collapsible-content">
+
+  <p>
+    Our goal now is to get a sprite displayed on the screen. This may sound simple... however... there is a lot you need to know first. I will begin by explaining how sprites are structured into <b>Tiles and Palettes</b>. Then I will explain the memory registers (<b>VRAM, PAL RAM, and OAM</b>) where sprite data/attributes are stored. Then I will explain the display register <b>REG_DISPCNT</b> which is the primary control of the screen. This is going to be a long "spit facts at you" section, but its pretty vital to your understanding of the code. After this, I promise we can start programming. If you don't care how anything works you can skip this section.
+  </p>
+
+  <h2>Tiles and Palettes</h2>
+
+  <p>
+    The GBA CAN represent graphics in a bitmap mode (meaning to plot a pixel at location (x,y), go to location y*w+x and
+    fill in the color). You COULD make games based purely on the bitmap modes, but very few do (DOOM does). Unless
+    you're willing to optimize the crap out of your code, you'll have a hard time doing it. The vast majority of games
+    use the GBA's hardware graphics, which come in the forms of tiles and palettes.
+  </p>
+
+  <p>
+    Sprites are smaller objects between 8x8 to 64x64 pixels in size. The GBA allows for <b>128 sprites</b> and you can
+    move them independently of each other. Sprites are composed of a matrix of smaller bitmaps called <b>tiles</b>. Your
+    basic tile is an 8x8 pixel bitmap. Tiles come in two types: <b>4BPP</b> (bits per pixel) and <b>8BPP</b>. The
+    sprites I made don't require more than 16 colors so I will use 4BPP mode.
+  </p>
+
+  <p>
+    <b>8BPP</b> - 256 Colors (2<sup>8</sup>), 64 bytes per tile, 8 bits per pixel. Each pixel in a tile is an 8-bit
+    index value of a 256 color palette.
+    <br>
+    <b>4BPP</b> - 16 Colors (2<sup>4</sup>), 32 bytes per tile, 4 bits per pixel. Attribute 2 of the <b>OAM</b> data
+    contains a 4 bit index into 16 distinct palettes which contain 16 colors values.
+  </p>
+
+  <p>
+    I know that was a lot of information so lets look at some pretty pictures now. Consider the picture below of a
+    sprite that I made of my friend Will. This is a 32x32 pixel image (I scaled up by factor of 4 so that I can
+    demonstrate tiles and palettes). The first thing we do is break the image into a <b>tilemap</b>. The tilemap should
+    consist of 16 <b>tiles</b> each containing 8x8 pixels. Also note that the sprite consists of just 8 unique colors
+    (because Will is just a simple little guy). This set of colors is known as the <b>palette</b>. The first color in
+    the palette is considered to be transparent (meaning it wont be rendered).
+  </p>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/Will0.png" id="figure" style="width: 10%;" />
+    <img src="/projects/Gameboy/files/Will1.png" id="figure" style="width: 10%;" />
+  </div>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/WillPal.png" id="figure" style="width: 20%;" />
+  </div>
+
+  <p>
+    The tilemap is 16x8x8 = 1024 pixels total. Each pixel contains a 4 bit index of the color palette. This means the
+    sprite is 1024 * (4/8) = 512 Bytes. The color palette has 8 colors. <b>Each color is a 16 bit value</b> (using 5
+    bits for red, green, and blue, and ignoring last bit). Meaning the palette takes up 8x(16/8) = 16 Bytes. So, total
+    storage of the sprite is 512+16 = <b>528 Bytes</b>. We can reduce this by noticing some of the tiles are identical
+    (completely black) so there is no need to store them twice. Im not going to do this just to keep things simple but
+    its an option if you're feeling spicy.
+
+  <pre>
+      F E D C  B A 9 8  7 6 5 4  3 2 1 0
+      <font color="black">X</font> <font color="blue">B B B  B B</font> <font color="green">G G  G G G</font> <font color="red">R  R R R R</font>
+  
+      0-4 <font color="red">(R)</font> = Red
+      5-9 <font color="green">(G)</font> = Green
+      A-F <font color="blue">(B)</font> = Blue
+    </pre>
+
+  </p>
+
+  <h2>VRAM, PAL RAM, and OAM</h2>
+
+  <p>
+    None of this really matters until you put the 512B of tile data and 16B of palette data into memory. Now we get to
+    touch some code! Lets start with the tiles first. We need to put the tiles in <b>VRAM</b> which starts at 0x06000000
+    and is 96KB long. Tonclib breaks the VRAM into <b>charblocks</b>. Each charblock is 16KB, so there is 6 charblocks
+    in VRAM. The first 4 are for background tiles and the last two are for sprite tiles. This means two things: we can
+    have (16KB*2)/32B = <b>1024 Sprite Tiles</b>, and sprite tiles are stored 16KB*4 = 64KB (0x10000) into VRAM. In
+    other words: <b>sprite tiles start at 0x06010000</b>. So to get the sprite tiles into memory we need to copy all
+    512B to 0x06010000 which is known as <b>tile_mem_obj</b> in tonclib.
+  </p>
+
+  <script type="text/plain" class="language-c">
+    // snippet from tonc_types.h
+    typedef struct { u32 data[8];  } TILE, TILE4;
+    typedef TILE  CHARBLOCK[512];
+
+    // snippet from tonc_memmap.h
+    #define MEM_VRAM	    0x06000000	//!< Video RAM. Note: no 8bit write !!
+    #define VRAM_BG_SIZE	0x10000		//!< BG VRAM size
+    #define MEM_VRAM_OBJ	(MEM_VRAM + VRAM_BG_SIZE) //!< Object VRAM address
+    #define tile_mem_obj	((CHARBLOCK*)MEM_VRAM_OBJ)
+  </script>
+
+  <p>
+    Palettes are stored in <b>PAL RAM</b> which starts at 0x05000000 and is 1KB long. PAL RAM is split into two even
+    sections. The first for backgrounds and the second for sprites. So we have 512B for sprite palettes which starts at
+    0x05000000+512B = 0x05000200. Since each color is 16 bits (2B) that means we have room for 512B/(2B/Color) = 256
+    Colors. In 4BPP Mode this means we have 16 palettes each with 16 colors (16*16 = 256). So to get the sprite palette
+    into memory we need to copy all 16B to 0x05000200 which is known as <b>pal_obj_mem</b> in tonclib.
+  </p>
+
+  <script type="text/plain" class="language-c">
+    // snippet from tonc_types.h
+    typedef u16 COLOR;  //!< Type for colors
+
+    // snippet from tonc_memmap.h
+    #define PAL_BG_SIZE   0x00200		//!< BG palette size
+    #define MEM_PAL_OBJ		(MEM_PAL + PAL_BG_SIZE)		//!< Object palette address
+    #define pal_obj_mem		((COLOR*)MEM_PAL_OBJ)
+  </script>
+
+  <p>
+    The Object Attribute Memory (<b>OAM</b>) which starts at 0x07000000, tells the GBA how you want to draw each sprite (object). This register is a little complex so read the Tonc Text for more info. The basics you need to know is each sprite (or object) has 3 attributes. I'll provide some details for those below but you don't need to understand them fully for this blog post.
+  </p>
+
+  <p><b>Attribute 0</b> - y coordinate, and the shape of the sprite.</p>
+  <div align="center">
+    <table border="1" cellspacing="0" cellpadding="2" width="50%">
+      <colgroup>
+        <col class="def" width="12%">
+      </colgroup>
+      <tbody>
+        <tr align="left">
+          <th>define</th>
+          <th>description
+          </th>
+        </tr>
+      </tbody>
+      <tbody valign="top">
+        <tr class="bg0">
+          <td><i>ATTR0_Y#</i>
+          </td>
+          <td><b>Y coordinate</b>. Marks the top of the sprite.
+          </td>
+        </tr>
+        <tr class="bg1">
+          <td>ATTR0_REG, ATTR0_AFF, ATTR0_HIDE, ATTR0_AFF_DBL.
+            <i>ATTR0_MODE#</i>
+          </td>
+          <td><b>(Affine) object mode</b>. Use to hide the sprite or govern
+            affine mode.
+            <ul>
+              <li><b>00</b>. Normal rendering.
+              </li>
+              <li><b>01</b>. Sprite is an affine sprite, using affine matrix
+                specified by <code>attr1{9-D}</code>
+              </li>
+              <li><b>10</b>. Disables rendering (hides the sprite)
+              </li>
+              <li><b>11</b>. Affine sprite using double rendering area.
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr class="bg0">
+          <td>ATTR0_BLEND, ATTR0_WIN. <i>ATTR0_GFX#</i>
+          </td>
+          <td><b>Gfx mode</b>. Flags for special effects.
+            <ul>
+              <li><b>00</b>. Normal rendering.
+              </li>
+              <li><b>01</b>. Enables alpha blending.
+              </li>
+              <li><b>10</b>. Object is part of the object window. The sprite
+                itself isn't rendered, but serves as a mask for bgs and other
+                sprites.
+              </li>
+              <li><b>11</b>. Forbidden.
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr class="bg1">
+          <td>ATTR0_MOSAIC
+          </td>
+          <td>Enables mosaic effect.
+          </td>
+        </tr>
+        <tr class="bg0">
+          <td>ATTR0_4BPP, ATTR0_8BPP
+          </td>
+          <td><b>Color mode</b>. 16 colors (4bpp) if cleared;
+            256 colors (8bpp) if set.
+          </td>
+        </tr>
+        <tr class="bg1">
+          <td>ATTR0_SQUARE, ATTR0_WIDE, ATTR0_TALL. <i>ATTR0_SHAPE#</i>
+          </td>
+          <td><b>Sprite shape</b>. This and the sprite's size
+            (<code>attr1{E-F}</code>) determines the sprite's real size
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><b>Attribute 1</b> - x coordinate and the size of the sprite.</p>
+  <div align="center">
+    <table border="1" cellspacing="0" cellpadding="2" width="50%">
+      <colgroup>
+        <col class="def" width="12%">
+      </colgroup>
+      <tbody>
+        <tr align="left">
+          <th>define</th>
+          <th>description
+          </th>
+        </tr>
+      </tbody>
+      <tbody valign="top">
+        <tr class="bg0">
+          <td><i>ATTR1_X#</i>
+          </td>
+          <td><b>X coordinate</b>. Marks left of the sprite.
+          </td>
+        </tr>
+        <tr class="bg1">
+          <td><i>ATTR1_AFF#</i>
+          </td>
+          <td><b>Affine index</b>. Specifies the <code>OAM_AFF_ENTY</code> this
+            sprite uses. Valid <i>only</i> if the affine flag
+            (<code>attr0</code>{8}) is set.
+          </td>
+        </tr>
+        <tr class="bg0">
+          <td>ATTR1_HFLIP, ATTR1_VFLIP. <i>ATTR1_FLIP#</i>
+          </td>
+          <td><b>Horizontal/vertical flipping</b> flags. Used <i>only</i> if
+            the affine flag (<code>attr0</code>) is clear; otherwise they're
+            part of the affine index.
+          </td>
+        </tr>
+        <tr class="bg1">
+          <td><i>ATTR1_SIZE#</i>
+          </td>
+          <td><b>Sprite size</b>. Kinda. Together with the shape bits
+            (<code>attr0</code>{E-F}) these determine the sprite's real size
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><b>Attribute 2</b> - control which tiles/palettes to display and its background priority.</p>
+
+  <div align="center">
+    <table border="1" cellspacing="0" cellpadding="2" width="50%">
+      <colgroup>
+        <col class="def">
+      </colgroup>
+      <tbody>
+        <tr align="left">
+          <th>define</th>
+          <th>description
+          </th>
+        </tr>
+      </tbody>
+      <tbody valign="top">
+        <tr class="bg0">
+          <td><i>ATTR2_ID#</i>
+          </td>
+          <td>Base <b>tile-index</b> of sprite. Note that in bitmap modes
+            this must be 512 or higher.
+          </td>
+        </tr>
+        <tr class="bg1">
+          <td><i>ATTR2_PRIO#</i>
+          </td>
+          <td><b>Priority</b>. Higher priorities are drawn first (and therefore
+            can be covered by later sprites and backgrounds). Sprites cover
+            backgrounds of the same priority, and for sprites of the
+            same priority, the higher <code>OBJ_ATTR</code>s are drawn first.
+          </td>
+        </tr>
+        <tr class="bg0">
+          <td><i>ATTR2_PALBANK#</i>
+          </td>
+          <td><b>Palette-bank</b> to use when in 16-color mode. Has no effect if
+            the color mode flag (<code>attr0</code>{C}) is set.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    tonc provides these attributes in a useful struct defined below. We will discuss how to use this later.
+  </p>
+
+  <script type="text/plain" class="language-c">
+    // snippet from tonc_types.h
+    typedef struct OBJ_ATTR
+    {
+      u16 attr0;
+      u16 attr1;
+      u16 attr2;
+      s16 fill;
+    } ALIGN4 OBJ_ATTR;
+  </script>
+
+  <h2>REG_DISPCNT</h2>
+
+  <p>
+    Finally, our last topic in this section. The <b>REG_DISPCNT</b> register is the primary control of the screen. This register is the first 15 bits of the <b>IO RAM</b>. The bit-layout of this register and their meanings can be found in the following table. I will highlight the ones we are most concerned with.
+  </p>
+
+  <table border="1" cellspacing="0" cellpadding="2">
+    <colgroup>
+      <col class="bits" width="40">
+      <col class="bf" width="8%">
+      <col class="def" width="12%">
+    </colgroup>
+    <tbody>
+      <tr align="left">
+        <th>bits</th>
+        <th>name</th>
+        <th>define</th>
+        <th>description
+        </th>
+      </tr>
+    </tbody>
+    <tbody valign="top">
+      <tr class="bg0">
+        <td>0-2 </td>
+        <td class="rclr0">Mode
+        </td>
+        <td>DCNT_MODEx. <i>DCNT_MODE#</i>
+        </td>
+        <td>Sets video mode. 0, 1, 2 are tiled modes; 3, 4, 5 are bitmap modes.
+        </td>
+      </tr>
+      <tr class="bg1">
+        <td class="rof">3 </td>
+        <td class="rclr7">GB
+        </td>
+        <td>DCNT_GB
+        </td>
+        <td>Is set if cartridge is a GBC game. Read-only.
+        </td>
+      </tr>
+      <tr class="bg0">
+        <td>4 </td>
+        <td class="rclr3">PS
+        </td>
+        <td>DCNT_PAGE
+        </td>
+        <td>Page select. Modes 4 and 5 can use page flipping for smoother
+          animation. This bit selects the displayed page (and allowing the
+          other one to be drawn on without artifacts).
+        </td>
+      </tr>
+      <tr class="bg1">
+        <td>5 </td>
+        <td class="rclr5">HB
+        </td>
+        <td>DCNT_OAM_HBL
+        </td>
+        <td>Allows access to OAM in an HBlank. OAM is normally locked in VDraw.
+          Will reduce the amount of sprite pixels rendered per line.
+        </td>
+      </tr>
+      <tr class="bg0" style="background-color: grey;">
+        <td>6 </td>
+        <td class="rclr2">OM
+        </td>
+        <td>DCNT_OBJ_1D
+        </td>
+        <td>Object mapping mode. Tile memory can be seen as a 32x32
+          matrix of tiles. When sprites are composed of multiple tiles
+          high, this bit tells whether the next row of tiles lies
+          beneath the previous, in correspondence with the matrix
+          structure (2D mapping, <code>OM</code>=0), or right next to
+          it, so that memory is arranged as an array of sprites (1D
+          mapping <code>OM</code>=1).
+        </td>
+      </tr>
+      <tr class="bg1">
+        <td>7 </td>
+        <td class="rclr6">FB
+        </td>
+        <td>DCNT_BLANK
+        </td>
+        <td>Force a screen blank.
+        </td>
+      </tr>
+      <tr class="bg0" style="background-color: grey;">
+        <td>8-B </td>
+        <td class="rclr1">BG0-BG3, Obj
+        </td>
+        <td>DCNT_BGx, DCNT_OBJ. <i>DCNT_LAYER#</i>
+        </td>
+        <td>Enables rendering of the corresponding background and sprites.
+        </td>
+      </tr>
+      <tr class="bg1">
+        <td>D-F </td>
+        <td class="rclr4">W0-OW
+        </td>
+        <td>DCNT_WINx, DCNT_WINOBJ
+        </td>
+        <td>Enables the use of windows 0, 1 and Object window, respectively.
+          Windows can be used to mask out certain areas (like the
+          lamp did in Zelda:LTTP).
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    By setting the bits for <b>DCNT_OBJ</b>, we can enable objects (sprites) to be seen. We need to also tell the GBA how the sprite tiles are stored. We can do this by setting the bits for <b>DCNT_OBJ_1D</b>. In 1D mode, tiles are stored sequentially. So the sprite I showed earlier would actually be stored in memory like this:
+  </p>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/WillTiles.png" id="figure" style="width: 40%;" />
+  </div>
+
+  <p>
+    In code, setting these bits is really easy thanks to the tonclib library. We simply need to do the following:
+  </p>
+
+  <script type="text/plain" class="language-c">
+    REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D;
+  </script>
+</div>
+
+<button class="collapsible">Sprite Creation 1 &#9205;</button>
+<div class="collapsible-content">
+  <p>
+    To create our sprite, we first need to draw it. I prefer to use photoshop for this but there are many tools available and you cant really go wrong. Just remember your sprite must be a set size. I will list the possible sizes below. For simplicity I will use the same 32x32 pixel sprite of our good pal Will from the previous section.
+  </p>
+
+  <table id="tbl-obj-size" class="reg" border="1" cellpadding="2" cellspacing="0" title="tbl-obj-size">
+    <tbody>
+      <tr>
+        <td>shape\size </td>
+        <th>00 </th>
+        <th>01 </th>
+        <th>10 </th>
+        <th>11
+        </th>
+      </tr>
+      <tr>
+        <th>00</th>
+        <td>8x8 </td>
+        <td>16x16 </td>
+        <td>32x32 </td>
+        <td>64x64
+        </td>
+      </tr>
+      <tr>
+        <th>01</th>
+        <td>16x8 </td>
+        <td>32x8 </td>
+        <td>32x16 </td>
+        <td>64x32
+        </td>
+      </tr>
+      <tr>
+        <th>10</th>
+        <td>8x16 </td>
+        <td>8x32 </td>
+        <td>16x32 </td>
+        <td>32x64
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Now that we have our sprite image, we need to use a tool called <a href="https://www.gbadev.org/tools.php?showinfo=1441">Usenti</a> to convert it to C code. I will provide the original Will sprite image below for your use.
+  </p>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/Will.bmp" id="figure" style="width: 5%;" />
+  </div>
+
+  <p>
+    Simply download this file, and open it in Usenti. You should see a window that looks like this:
+  </p>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/Usenti1.png" id="figure" style="width: 20%;" />
+  </div>
+
+  <p>
+    You will first want to make sure you have the correct number of colors by selecting <code>Palette > Requantize</code>. Since you can only have 16 colors, you'll want to type 16 here and then click <code>OK</code>. Next you want to reorder you palette by selecting <code>Palette > Sort</code>. I like to sort my palette by ascending brightness beginning from color 0 and ending at color 15. This is because the first color is your transparent color and I usually use black for that. Now that that is done, you can save you sprite by selecting <code>File > Save As</code>. I will save my file as <code>Will.bmp</code>. When prompted, you want to select a bit depth of 4 (assuming you are using 4BPP Mode). Now the scary part. You want to export your image as GBA Source Code by selecting <code>Image > Export</code> and selecting a destination. You will see the following window appear:
+  </p>
+
+  <div align="center">
+    <img src="/projects/Gameboy/files/Usenti2.png" id="figure" style="width: 30%;" />
+  </div>
+
+  <p>
+    Don't panic this is actually really simple. We want to select basically all the options in the screenshot. First select <code>Gfx</code> and select <code>tile</code>. You want <code>4bpp</code> mode. You can choose to use compression if you have a lot of duplicate tiles but im not going to. Next, under <code>Meta/Obj</code> select the aspect ratio of your sprite. Mine is <code>Square</code>. My Sprite is also 4x4 tiles (32x32 pixels) so I will select that option as well. FOr the <code>Pal</code> section simply select the number of colors you need to use. For me it's 8. Now you want to make sure <code>h file</code> is selected under the <code>File</code> section. You can choose to group the bytes as <code>u8, u16, or u32</code>. Functionally this is makes no deference since it will be the same number of bytes regardless. This is more a question of readability. I personally like u16 because it makes the colors easier to read. Once you are done click <code>OK</code> and Usenti will export two files:
+    <a href="/projects/Gameboy/files/Will.c">Will.c</a> and <a href="/projects/Gameboy/files/Will.h">Will.h</a>. These can be copies to the <code>source</code> and <code>include</code> folders of your workspace respectively. Now we can actually write some code :)!
+  </p>
+</div>
+
+<button class="collapsible">Sprite Creation 2 &#9205;</button>
+<div class="collapsible-content">
+
+
+
+  <script type="text/plain" class="language-markdown">
+    └── Desktop/
+        └── Sprites/
+            ├── source/
+            │   ├── Will.c
+            │   └── main.c
+            ├── include/
+            │   └── Will.h
+            └── Makefile
+  </script>
+
+  <script type="text/plain" class="language-c">
+    #include <tonc.h> // GBA library
+    #include "Will.h" // for sprite data
+    #include <string.h> // for memcpy
+    
+    #define PLAYER_TILE_ID    0
+    #define PLAYER_PAL_BANK   0
+    #define NUM_SPRITES       1
+    #define PLAYER_X          102
+    #define PLAYER_Y          64
+    
+    int main()
+    {
+    
+      memcpy(&tile_mem_obj[PLAYER_TILE_ID], WillTiles, WillTilesLen); // copy tiles
+      memcpy(pal_obj_mem, WillPal, WillPalLen); // copy pal
+    
+      
+      OBJ_ATTR obj_attr_buf[NUM_SPRITES];  // create a set of obj attr structs
+      oam_init(obj_attr_buf, NUM_SPRITES); // initialize sprite attr
+      OBJ_ATTR *player = &obj_attr_buf[0]; // pointer to start of obj buffer
+      obj_set_attr(player, ATTR0_4BPP, ATTR1_SIZE_32, ATTR2_PALBANK(PLAYER_PAL_BANK) | PLAYER_TILE_ID);
+      obj_set_pos(player, PLAYER_X, PLAYER_Y); // set the objects position
+      oam_copy(oam_mem, obj_attr_buf, NUM_SPRITES); // copy sprite data from buffer to system mem
+    
+      REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D;
+    
+      // enable isr switchboard and VBlank interrupt
+      irq_init(NULL);
+      irq_add(II_VBLANK, NULL);
+      
+      while(1)
+      {
+          VBlankIntrWait(); // vsync
+      }
+    }
+  </script>
+
+</div>
+
+<button class="collapsible">Sprite Animation &#9205;</button>
+<div class="collapsible-content">
+</div>

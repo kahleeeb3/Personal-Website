@@ -1,0 +1,66 @@
+.background{
+    background-color:rgb(71, 71, 71);
+}
+
+#main{
+    background-color:#c6c6c6;
+    padding-left: 50px;
+    padding-right: 50px;
+    /* margin-left: 250px; */
+}
+
+
+/* MY TABLES THEME */
+.myTable{
+    width: 100%;
+    /* font-size: 10px; */
+}
+.myTable th{
+    padding: 5px 5px 5px 5px;
+    background-color: rgb(90, 90, 90);
+    text-align: left;
+}
+
+.myTable td{
+    /* top, right, bottom, left */
+    padding: 5px 5px 5px 5px;
+}
+
+/* BELOW IS THE STYLES FOR COLLAPSIBLES */
+.collapsible {
+    background-color: transparent;
+    color: black;
+    cursor: pointer;
+    /* padding: 0px; */
+    /* width: 100%; */
+    padding: 0px;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  
+  .collapsible:hover {
+    /* background-color: #555; */
+    color: grey;
+  }
+  
+  .collapsible:after {
+    /* content: '\002B'; */
+    color: white;
+    font-weight: bold;
+    float: right;
+    /* margin-left: 5px; */
+  }
+  
+  /* .active:after {
+    content: "\2212";
+  } */
+  
+  .collapsible-content {
+    /* padding: 0 18px; */
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    /* background-color: #f1f1f1; */
+  }
