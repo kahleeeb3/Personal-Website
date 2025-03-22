@@ -8,13 +8,6 @@
             "link" : "/?page=game boy&subpage=1"
         },
         {
-            "title" : "A Simple File System",
-            "date"  : "April 22, 2023",
-            "image" : "/pages/operating%20systems/files/extent_access.png",
-            "description": "Example of creating a simple file system using the C programming language. The file system will allow users to list directory entries, rename files, copy files, delete files, as well as read/write/open/close files.",
-            "link": "/?page=operating systems"
-        },
-        {
             "title" : "Arduino Uno Oscilloscope",
             "date"  : "November 1, 2021",
             "image" : "/pages/arduino%20oscilloscope/files/setup(1).jpg",
