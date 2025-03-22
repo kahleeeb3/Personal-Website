@@ -45,10 +45,6 @@
 }
 
 .header {
-    margin: 15px 0px 0px 15px;
-}
-
-.explanation {
-    font-style: italic;
-    margin: 15px 15px 15px 15px
+    margin: 0;
+    margin-top: 10px;
 }
