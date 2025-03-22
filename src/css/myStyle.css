@@ -36,7 +36,6 @@ body > .openSidebar > .openButton {
     font-size: 20px;
     margin: 16px 0px 0px 16px;
     padding: 10px 15px;
-    cursor: pointer;
 }
 
 body > .sidebar {
@@ -52,6 +51,5 @@ body > .sidebar > .closeButton {
     border: none;
     font-size: 36px;
     padding: 0% 0% 0% 85%;
-    cursor: pointer;
 }
 
