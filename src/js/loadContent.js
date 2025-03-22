@@ -1,3 +1,8 @@
+/*
+    1. User navigates to /?page=<pageName>
+    2. User clicks a link to /?page=<pageName>
+*/
+
 var currSidebar = null; // current sidebar displayed
 var currPage = null; // current page loaded
 var page = null; // page the user is trying to reach
@@ -77,7 +82,6 @@ function insertHTML(element, file){
             HTMLElement.innerHTML = newHTML;
             currPage = page;
             // history.pushState({ page: page }, "", `/?page=${page}`);
-            requestAnimationFrame(() => Prism.highlightAll()); // ensure prism runs when new content loads
         }
     });
 }
