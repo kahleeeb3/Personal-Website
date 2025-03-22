@@ -17,21 +17,274 @@
     <link href="/src/css/prism.css" rel="stylesheet" />
     <script src="/src/js/prism.js" data-manual></script>
     <!-- Custom -->
-    <link rel="stylesheet" href="/src/css/myStyle.css"/>
+    <!-- <link rel="stylesheet" href="/src/css/myStyle.css"/>
     <script src="/src/js/loadContent.js"></script>
     <script src="/src/js/sidebar.js"></script>
     <script src="/src/js/collapsible.js"></script>
-    <link rel="stylesheet" href="/src/css/collapsible.css"/>
+    <link rel="stylesheet" href="/src/css/collapsible.css"/> -->
 </head>
+
+<style>
+    body {
+        /* Styling */
+        background-color: rgb(70, 70, 70);
+        font-family: "Lato", sans-serif;
+        font-size: 15px;
+
+        /* Body fill the viewport */
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+    }
+
+    .contentContainer {
+        color: white;
+        background-color: rgb(70, 70, 70);
+        max-width: 1750px;
+        margin: auto;
+        height: 100%;
+    }
+
+    .topNav {
+        background-color: rgb(40, 40, 40);
+        position: fixed;
+        max-width: 1750px;
+        width: 100%;
+        height: 33px;
+        margin: auto;
+        z-index: 3;
+
+        padding: 0px;
+        box-sizing: border-box;
+
+    }
+
+    .sidebar {
+        background-color: rgb(15, 15, 15);
+        height: 100%;
+        width: 230px;
+        position: fixed;
+        z-index: 2;
+        padding: 10px;
+        padding-top: 33px;
+    }
+
+    .content {
+        background-color: rgb(190, 190, 190);
+        color: black;
+        margin-left: 250px;
+        min-width: 330px;
+        z-index: 1;
+        padding: 25px;
+        padding-top: 33px;
+    }
+
+    .openSidebarButton {
+        background-color: transparent;
+        color: white;
+        border: 1px black;
+        font-size: 23px;
+        cursor: pointer;
+        display: none; /*Should default to hidden*/
+    }
+
+    .closeSidebarButton {
+        background-color: transparent;
+        color: white;
+        border: none;
+        font-size: 23px;
+        cursor: pointer;
+    }
+</style>
 
 <body>
     <div id="contentContainer" class="contentContainer">
         <div id="topNav" class="topNav">
             <button id="openSidebarButton" class="openSidebarButton" onclick="openSidebar()">&#9776;</button>
         </div>
-        <div id="sidebar" class="sidebar"></div>
-        <div id="content" class="content"></div>
+        <div id="sidebar" class="sidebar">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <h1>Home</h1>
+                <button id="closeSidebarButton" class="closeSidebarButton" onclick="closeSidebar()">&#10005;</button>
+            </div>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam iaculis tempor nulla vitae rhoncus.
+                Curabitur ornare, lacus id aliquam porttitor, diam purus blandit enim, sit amet dignissim leo ligula
+                quis quam. Mauris scelerisque, nisl et auctor vestibulum, lacus magna iaculis eros, vitae maximus ipsum
+                felis quis tellus. Donec feugiat feugiat nibh nec mattis. Duis mollis libero nisl, ac placerat erat
+                viverra ac. Maecenas in turpis aliquam, finibus enim vel, porttitor nibh. Aenean id tellus semper,
+                faucibus eros ac, commodo turpis. Cras blandit pharetra consectetur. Integer finibus pharetra justo, sed
+                ornare lectus molestie nec. Cras molestie turpis non ipsum finibus faucibus varius nec tellus.
+            </p>
+        </div>
+        <div id="content" class="content">
+            <h1>HERE IS SOME SAMPLE CONTENT</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam iaculis tempor nulla vitae rhoncus.
+                Curabitur ornare, lacus id aliquam porttitor, diam purus blandit enim, sit amet dignissim leo ligula
+                quis quam. Mauris scelerisque, nisl et auctor vestibulum, lacus magna iaculis eros, vitae maximus ipsum
+                felis quis tellus. Donec feugiat feugiat nibh nec mattis. Duis mollis libero nisl, ac placerat erat
+                viverra ac. Maecenas in turpis aliquam, finibus enim vel, porttitor nibh. Aenean id tellus semper,
+                faucibus eros ac, commodo turpis. Cras blandit pharetra consectetur. Integer finibus pharetra justo, sed
+                ornare lectus molestie nec. Cras molestie turpis non ipsum finibus faucibus varius nec tellus.
+            </p>
+            <p>
+                Duis ultrices id ipsum a auctor. Nulla mollis sem magna, a rutrum nibh aliquet eu. Ut quis sem non
+                tellus ornare vestibulum eget non arcu. Vestibulum ac tellus suscipit, condimentum odio et, pharetra
+                dolor. Sed dignissim ex et arcu eleifend, tristique eleifend urna cursus. Nunc iaculis eleifend varius.
+                Nunc ac turpis ante. Donec lorem nibh, condimentum non felis hendrerit, cursus consequat tortor. Ut
+                mauris dui, rhoncus et velit in, tempor sagittis orci. Sed in libero ac dolor tincidunt vestibulum id
+                quis neque. Nulla in tempor massa, consectetur mattis justo. Sed vel molestie velit, eget commodo purus.
+                Morbi pretium pharetra justo eu cursus. Duis vestibulum libero vitae nunc interdum posuere. Praesent non
+                elit interdum, ullamcorper odio sit amet, euismod eros. Maecenas ultricies in arcu accumsan aliquam.
+            </p>
+            <p>
+                Morbi ultricies purus ut enim sollicitudin, eget ullamcorper quam pharetra. Maecenas nec tortor a tortor
+                pretium consequat id a nisl. Nulla non mauris vitae neque feugiat consectetur nec eu dui. Morbi non
+                fringilla purus, eget consequat nisl. Praesent quis rutrum nisl. Curabitur non mi vitae ante iaculis
+                pretium sit amet quis velit. Curabitur magna ante, tincidunt sit amet leo in, pellentesque pharetra
+                ante. Curabitur a elementum tellus, lacinia mattis ligula.
+            </p>
+            <p>
+                Proin nec eleifend sapien. Sed mollis orci ac orci porta ullamcorper. Vestibulum aliquam vitae nibh id
+                rutrum. Etiam et orci ultrices, vehicula quam et, placerat lectus. Sed metus ex, vulputate non gravida
+                nec, pulvinar et sem. Donec hendrerit augue pulvinar tortor eleifend, vel malesuada dui pellentesque.
+                Aliquam interdum vulputate elit quis pretium. Vivamus id nunc nisl. Mauris convallis facilisis nulla,
+                sit amet scelerisque ex lacinia vitae. Vivamus eu hendrerit metus, non eleifend elit. Nam cursus mi
+                suscipit, posuere ligula at, viverra neque. Nulla ut blandit odio, sit amet volutpat lectus. Vestibulum
+                pellentesque, neque eget venenatis varius, ligula neque rutrum velit, eu egestas sem mi eu elit.
+                Maecenas et purus sed nulla sagittis congue non quis ex. Phasellus faucibus aliquet lacus, sit amet
+                iaculis massa tempor quis. Etiam hendrerit volutpat enim vel pretium.
+            </p>
+            <p>
+                Nullam nec augue sed enim placerat ullamcorper. Nulla posuere ac dolor vitae cursus. Vivamus quam elit,
+                consectetur vitae quam vel, euismod bibendum leo. Nulla facilisi. Morbi sem purus, semper id sagittis
+                ut, venenatis eu justo. Mauris sagittis semper lobortis. Nullam posuere, neque at maximus tincidunt,
+                diam ligula laoreet lacus, eu gravida arcu nisi vel nunc. Vivamus ultrices fringilla mi, eu malesuada
+                nibh aliquet id. Nullam non fringilla diam. Mauris mollis ut justo eu vestibulum. Sed placerat ante
+                convallis massa feugiat gravida. Vestibulum efficitur eros at consequat porta. Praesent ac eros auctor,
+                vestibulum justo vel, tristique mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+                posuere cubilia curae;
+            </p>
+            <p>
+                Donec mattis elit vel justo gravida, eu sodales mauris mattis. Ut mollis aliquet eleifend. Nunc a sem
+                congue, commodo lacus sed, pellentesque elit. Suspendisse faucibus malesuada enim, id elementum ex
+                lobortis in. Morbi nec lorem a nisi pharetra gravida semper nec magna. Sed congue urna et augue lobortis
+                semper. Nunc faucibus venenatis luctus. Nulla pharetra pulvinar risus. Nullam ut enim id mi mattis
+                fermentum. Vestibulum fringilla ac purus quis pellentesque. Nulla consectetur tellus sed justo placerat,
+                lobortis convallis risus sollicitudin. Sed elementum orci sed lacus rutrum sollicitudin. Orci varius
+                natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+            </p>
+            <p>
+                Ut sit amet nisi lobortis, egestas velit quis, laoreet orci. Fusce ultrices posuere justo quis mattis.
+                Donec in nunc ipsum. Donec viverra pretium tortor, id auctor sapien ornare posuere. Mauris ex est,
+                euismod sed tincidunt a, elementum sed eros. Aliquam hendrerit purus at ligula rutrum placerat. Mauris
+                iaculis egestas eros quis egestas. Sed sit amet sem quis orci cursus varius. Nunc non libero in erat
+                ultrices mollis. Ut varius nulla eros, eu auctor purus malesuada et. Donec ut dolor libero. Donec nunc
+                metus, egestas et sapien nec, lobortis rhoncus tortor. Integer aliquet gravida tortor et accumsan.
+            </p>
+            <p>
+                Nulla et leo lectus. Integer vitae risus ante. Proin at enim dignissim, faucibus sapien sit amet,
+                placerat arcu. Quisque et euismod purus. Morbi sodales faucibus lacus, vitae suscipit mauris pharetra
+                in. Phasellus mattis euismod lacinia. Praesent pulvinar ultricies tincidunt. Interdum et malesuada fames
+                ac ante ipsum primis in faucibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam
+                diam sem, elementum nec ex sit amet, fermentum rhoncus enim. Nunc et nunc at leo viverra imperdiet. Sed
+                rutrum suscipit pretium. Mauris porta purus vel sollicitudin imperdiet.
+            </p>
+            <p>
+                Etiam iaculis pharetra turpis. Vivamus lorem diam, auctor quis venenatis id, interdum nec ipsum.
+                Suspendisse ipsum est, condimentum ac tincidunt eget, cursus eu enim. Ut in dapibus justo. Quisque sed
+                nisi mollis, accumsan lorem nec, sodales mauris. Morbi lacus nunc, maximus et aliquet et, sollicitudin
+                et massa. Suspendisse venenatis non tortor id vulputate. Curabitur pretium massa sed turpis tempor
+                tincidunt. Ut quis turpis aliquet mi dignissim rutrum. Proin semper justo vitae libero consectetur, a
+                efficitur enim interdum. Quisque convallis ullamcorper elit vel convallis. Vivamus scelerisque urna
+                nisi, congue dignissim lacus interdum at.
+            </p>
+            <p>
+                In hac habitasse platea dictumst. Duis venenatis erat vel ex feugiat, in tristique neque posuere. Proin
+                placerat tincidunt dui, vel aliquam felis convallis id. Sed nec libero vehicula diam pellentesque
+                rhoncus. Nulla quam massa, ultricies eget ullamcorper a, gravida et neque. Integer vitae nulla eu est
+                semper lacinia. Curabitur at ligula pellentesque, ornare libero ut, vehicula orci. Praesent lacus lacus,
+                sagittis id tellus sit amet, vestibulum mattis turpis. Duis mattis at ligula sed sodales. Cras vitae
+                nulla pulvinar, faucibus lorem eu, auctor leo. Curabitur vel lectus mattis, suscipit ligula non,
+                pulvinar nulla. Duis sed bibendum nulla. Aliquam massa dui, egestas eu eleifend vitae, dignissim tempus
+                neque.
+            </p>
+            <p>
+                Vivamus ut sodales sem. Duis vehicula quam nunc, et tempor nisi fermentum eu. Cras non lacus eu elit
+                dictum pharetra. Sed purus erat, porta nec lorem vulputate, scelerisque varius nibh. Mauris arcu magna,
+                suscipit ac laoreet vitae, mollis in massa. Integer ac nunc rhoncus lorem molestie luctus a eget dolor.
+                Proin convallis, nibh vitae cursus euismod, justo odio eleifend est, in tincidunt libero quam non
+                lectus. Cras ac diam leo. Morbi pulvinar felis eget lacus pulvinar, ut molestie dui efficitur.
+            </p>
+            <p>
+                Donec iaculis, orci pulvinar pretium dignissim, mauris augue posuere diam, a dictum orci purus in diam.
+                Aliquam laoreet est sit amet vehicula iaculis. Mauris iaculis, odio sed sollicitudin laoreet, mi lectus
+                viverra lectus, et laoreet turpis tortor vitae neque. Suspendisse neque mauris, tempus id arcu sed,
+                dignissim blandit ligula. In pretium suscipit mi ut condimentum. Praesent aliquet enim in nunc
+                sollicitudin, eu molestie enim scelerisque. Integer nunc ipsum, scelerisque quis malesuada sit amet,
+                blandit ac lectus. Donec odio nibh, accumsan sit amet ipsum et, luctus lobortis massa. In eu efficitur
+                risus, non finibus nisl. Aliquam erat volutpat.
+            </p>
+            <p>
+                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent sed
+                volutpat risus. Nulla id rutrum felis. Nam pellentesque eget erat nec dignissim. Pellentesque posuere
+                tempor nibh quis condimentum. Vestibulum eu risus sapien. Morbi vel dapibus augue.
+            </p>
+            <p>
+                Curabitur sit amet ultrices risus, ut congue turpis. Aliquam ligula justo, sollicitudin et mattis eu,
+                lobortis sit amet sapien. Cras eu sem lacus. Vivamus dapibus ante vel augue eleifend hendrerit. Donec
+                porta sem orci. Mauris lacinia fermentum auctor. Proin in arcu maximus, feugiat turpis eget, vestibulum
+                urna. Donec in mi nunc. Nulla porttitor facilisis leo ut suscipit. Etiam laoreet massa tortor, faucibus
+                rutrum felis sagittis eget. Maecenas posuere, odio id tincidunt commodo, turpis risus vestibulum turpis,
+                vitae placerat nunc sem eu nulla. Nulla blandit diam sit amet felis consectetur mattis. Quisque commodo
+                fringilla feugiat.
+            </p>
+            <p>
+                Sed eget mollis erat. Duis et pellentesque massa. Cras sit amet finibus massa. Aliquam ultricies non leo
+                nec suscipit. Suspendisse potenti. Duis suscipit pulvinar porta. Nam convallis sem sed orci semper, nec
+                mollis mi imperdiet. Curabitur dapibus tellus non erat ullamcorper, sed fermentum eros ornare. Mauris
+                maximus sapien nunc. Sed bibendum justo sed nunc molestie tincidunt. Nam viverra eros sem, id tristique
+                dui efficitur non. Vestibulum vestibulum, elit eget vehicula consectetur, tortor turpis rutrum felis,
+                mattis porttitor ligula lectus aliquam eros. Praesent tincidunt libero in velit condimentum, in gravida
+                leo gravida. Fusce est risus, tincidunt vitae eros non, volutpat maximus enim. Donec tortor nisi,
+                hendrerit eget tortor eu, suscipit efficitur ligula.
+            </p>
+        </div>
     </div>
 </body>
+
+<script>
+    function openSidebar() {
+        if (window.innerWidth > 990) {
+            document.getElementById("content").style.marginLeft = "250px";
+        }
+        document.getElementById("sidebar").style.display = "block";
+        document.getElementById("openSidebarButton").style.display = "none"; 
+    }
+
+    function closeSidebar() {
+        document.getElementById("content").style.marginLeft = "0px";
+        document.getElementById("sidebar").style.display = "none";
+        document.getElementById("openSidebarButton").style.display = "block"; 
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        if (window.innerWidth < 990) {
+            closeSidebar();
+        }
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth < 990) {
+            closeSidebar();
+        }
+        else {
+            openSidebar();
+        }
+    });
+</script>
 
 </html>

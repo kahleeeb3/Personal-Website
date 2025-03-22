@@ -1,8 +1,7 @@
-body {
+body{
     /* Styling */
-    background-color: rgb(70, 70, 70);
+    background-color: rgb(71, 71, 71);
     font-family: "Lato", sans-serif;
-    font-size: 15px;
 
     /* Body fill the viewport */
     margin: 0;
@@ -10,65 +9,49 @@ body {
     height: 100vh;
     max-width: 100vw;
     max-height: 100vh;
+
+    /* Grid System */
+    display: grid;
+    grid-template-columns: 250px 1fr;
 }
 
-.contentContainer {
+body > .content {
+    background-color: #c6c6c6;
+    margin: 10px;
+    margin-bottom: 0px;
+    overflow: auto; /* Allow Scrolling */
+    padding-left: 3%;
+    padding-right: 3%;
+    
+}
+
+body > .openSidebar {
+    display: none; /* not showing by default */
+}
+
+body > .openSidebar > .openButton {
+    background-color: #111;
     color: white;
-    background-color: rgb(70, 70, 70);
-    height: 100%;
-    max-width: 1750px;
-    margin: auto;
-    overflow: hidden;
-}
-
-.topNav {
-    background-color: rgb(40, 40, 40);
-    position: fixed;
-    max-width: 1750px;
-    width: 100%;
-    height: 33px;
-    margin: auto;
-    z-index: 3;
-    padding: 0px;
-    box-sizing: border-box;
-}
-
-.sidebar {
-    background-color: rgb(15, 15, 15);
-    height: 100%;
-    width: 230px;
-    position: fixed;
-    z-index: 2;
-    padding: 10px;
-    padding-top: 33px;
-}
-
-.content {
-    background-color: rgb(190, 190, 190);
-    color: black;
-    margin-left: 250px;
-    min-width: 330px;
-    z-index: 1;
-    padding: 25px;
-    padding-top: 33px;
-    height: 100%;
-    overflow: auto;
-}
-
-.openSidebarButton {
-    background-color: transparent;
-    color: white;
-    border: 1px black;
-    font-size: 23px;
+    border: none;
+    font-size: 20px;
+    margin: 16px 0px 0px 16px;
+    padding: 10px 15px;
     cursor: pointer;
-    display: none; /*Should default to hidden*/
 }
 
-.closeSidebarButton {
+body > .sidebar {
+    background-color: #111;
+    color: white;
+    height: 100vh;
+    padding: 0px 16px 0px 16px; /*top right bottom left*/
+}
+
+body > .sidebar > .closeButton {
     background-color: transparent;
     color: white;
     border: none;
-    font-size: 23px;
+    font-size: 36px;
+    padding: 0% 0% 0% 85%;
     cursor: pointer;
-    padding-left: 200px;
 }
+
