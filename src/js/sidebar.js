@@ -1,15 +1,39 @@
-function openSidebar() {
-    if (window.innerWidth > 990) {
-        document.getElementById("content").style.marginLeft = "250px";
-    }
-    document.getElementById("sidebar").style.display = "block";
-    document.getElementById("openSidebarButton").style.display = "none"; 
+function closeSidebar(){
+    const sidebar = document.getElementById("sidebar");
+    const content = document.getElementById("content");
+    const button = document.getElementById("openSidebarButton");
+
+    button.style.backgroundColor = ""; 
+    content.style.marginLeft = "0px";
+    sidebar.style.display = "none";
+
+    sidebar.classList.remove("expanded");
 }
 
-function closeSidebar() {
-    document.getElementById("content").style.marginLeft = "0px";
-    document.getElementById("sidebar").style.display = "none";
-    document.getElementById("openSidebarButton").style.display = "inline-block"; 
+function openSidebar(){
+    const sidebar = document.getElementById("sidebar");
+    const content = document.getElementById("content");
+    const button = document.getElementById("openSidebarButton");
+    
+    button.style.backgroundColor = "rgb(15, 15, 15)"; 
+
+    if (window.innerWidth > 990) {
+        content.style.marginLeft = "250px";
+    }
+    sidebar.style.display = "block";
+
+    sidebar.classList.add("expanded");
+}
+
+function toggleSidebar(){
+    const sidebar = document.getElementById("sidebar");
+
+    if(sidebar.classList.contains("expanded")){
+        closeSidebar();
+    }
+    else{
+        openSidebar();
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
