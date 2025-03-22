@@ -1,21 +1,3 @@
-/*
-User is going to navigate ?page=<pageName>
-
-- if no page provided:
-    - load: pages/home/home.html
-- else:
-    - load: pages/<pageName>/<pageName>
-    - if pages/<pageName>/sidebar.html exists:
-        - load: pages/<pageName>/sidebar.html
-*/
-
-function getCurrPageName() {
-    const queryString = window.location.search; // get current page url
-    const urlParams = new URLSearchParams(queryString);
-    const page = urlParams.get('page'); // get the page param
-    return page
-}
-
 function readTextFile(file, callback) {
     fetch(file)
         .then(response => {
@@ -30,54 +12,29 @@ function readTextFile(file, callback) {
 
 function replaceHTML(element, file) {
     // replaces elements inner HTML with text from a file
-    const HTMLElement = document.getElementById(element);
+    var HTMLElement = document.getElementById(element);
 
     readTextFile(file, function(content) {
         HTMLElement.innerHTML = content;
     });
+
 }
 
-function getPage(page) {
-    // if no page was passed, set page to home
-    if (page == null || page.trim() == '') {
-        page = "home";   
+function getPage() {
+    // user will pass /?page=<pageName>
+    const queryString = window.location.search; // get current page url
+    const urlParams = new URLSearchParams(queryString);
+    const page = urlParams.get('page'); // get the page param
+
+    // check if a page was passed
+    if (page !== null && page.trim() !== '') {
+        replaceHTML("content", `${page}.html`); // insert main text
+    } else {
+        // if no page passed, load home.html
+        replaceHTML("content", "home.html"); // insert main text
     }
-
-    replaceHTML("content", `pages/${page}/${page}.html`);
-    replaceHTML("sidebar", `pages/${page}/sidebar.html`);
-    // history.pushState({ page: page }, "", `/?page=${page}`);
 }
 
-/*
-function handleInternalLink(href) {
-    // handles links to internal web pages
-    const url = new URL(href); // get url
-    const page = url.searchParams.get('page'); // get page name
-    getPage(page);
+function getSidebar() {
+    replaceHTML("sidebar", "sidebar.html");
 }
-
-function handlePopState(event) {
-    // Handle the state when the user presses the back/forward button
-    const page = event.state ? event.state.page : "home"; // Default to "home" if no state exists
-    replaceHTML("content", `${page}.html`);
-}
-*/
-
-document.addEventListener("DOMContentLoaded", function () {
-    getPage(getCurrPageName());
-    /*
-    replaceHTML("sidebar", "sidebar.html"); // load sidebar
-
-    
-    // listen for internal links
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('internal-link') && event.target.hasAttribute('href')) {
-            event.preventDefault();
-            handleInternalLink(event.target.href);
-        }
-    });
-
-    // Listen for changes in the history (back/forward buttons)
-    window.addEventListener('popstate', handlePopState);
-    */
-});

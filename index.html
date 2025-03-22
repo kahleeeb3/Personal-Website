@@ -1,17 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-
-    <!-- Prevent caching of this page -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
     <title>Caleb Powell</title>
+    <meta http-equiv="Cache-Control" content="no-cache"> <!-- Dont let browser store cache -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- set viewport width and scale to 100% -->
-    <link rel="stylesheet" href="/src/css/myStyle.css"/>
-    <script src="/src/js/loadContent.js" defer></script>
-    <script src="/src/js/sidebar.js" defer></script>
+    <link rel="stylesheet" href="/src/css/myStyle.css" /> <!-- Load CSS -->
+    <script src="/src/js/loadContent.js"></script>
+    <script src="/src/js/sidebar.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 
@@ -22,5 +17,10 @@
     </div>
     <div id="content" class="content"></div>
 </body>
+
+<script>
+    getSidebar(); // load sidebar content
+    getPage(); // load page content
+</script>
 
 </html>
