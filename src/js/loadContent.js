@@ -148,14 +148,6 @@ document.addEventListener('click', function(event) {
 
         // update history
         history.pushState(null, null, event.target.href);
-
-        // scroll to the top
-        document.documentElement.scrollTop = 0;
-
-        // close sidebar on mobile
-        if (window.innerWidth < 990) {
-            closeSidebar();
-        }
     }
 });
 
