@@ -37,17 +37,6 @@ body {
     box-sizing: border-box;
 }
 
-.navButton{
-    color: white;
-    display: inline-block;
-    text-decoration: none;
-    padding: 7px 15px 7px 15px;
-    letter-spacing: 2px;
-}
-
-.navButton:hover{
-    background-color: rgb(70, 70, 70);
-}
 .sidebar {
     background-color: rgb(15, 15, 15);
     height: 100%;
@@ -68,6 +57,15 @@ body {
     padding-top: 33px;
     height: 100%;
     overflow: auto;
+}
+
+.openSidebarButton {
+    background-color: transparent;
+    color: white;
+    border: 1px black;
+    font-size: 23px;
+    cursor: pointer;
+    display: none; /*Should default to hidden*/
 }
 
 .closeSidebarButton {
