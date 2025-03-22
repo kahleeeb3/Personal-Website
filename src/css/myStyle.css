@@ -43,11 +43,14 @@ body {
     text-decoration: none;
     padding: 7px 15px 7px 15px;
     letter-spacing: 2px;
+    user-select: none;
+    cursor: pointer;
 }
 
 .navButton:hover{
     background-color: rgb(70, 70, 70);
 }
+
 .sidebar {
     background-color: rgb(15, 15, 15);
     height: 100%;
